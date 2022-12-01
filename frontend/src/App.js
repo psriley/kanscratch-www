@@ -1,6 +1,8 @@
-import logo from './logo.svg';
+import placeholder from './images/placeholder.png'
 import './App.css';
+import { Link } from "react-router-dom";
 import {useState, useEffect} from 'react';
+import Tbar from "./components/topbar";
 
 function App() {
   const [data, setData] = useState(null);
@@ -14,11 +16,38 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <h1>An Awesome Blog </h1>
-        <h3>On Django, React, Postgres, and Docker </h3>
-
-        <p>{data}</p>
+        <Tbar/>
+        <div className="Content">
+          <div className="Container">
+            <div className="Container">
+                <div className="Classrooms">
+                  Classrooms
+                  <div style={{display: "flex", flexWrap: "wrap", flexDirection: "column", border: "2px solid red"}}>
+                    Looks like you don't have any classrooms yet.
+                  </div>
+                </div>
+                <div className="Assignments">
+                  Assignments
+                  <div style={{gap: "1vh", display: "flex", flexWrap: "wrap", flexDirection: "column", border: "2px solid red"}}>
+                    <img src={placeholder}/>
+                    <img src={placeholder}/>
+                    <img src={placeholder}/>
+                  </div>
+                </div>
+            </div>
+            <div>
+              <div className="AssignmentView">
+                <div>
+                  Details
+                  <Link to="/details">
+                    <img src={placeholder}/>
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+          <p>{data}</p>
+        </div>
       </header>
     </div>
   );
