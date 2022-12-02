@@ -23,11 +23,8 @@ services:
     ports:
       - '3000:3000'
 
-    environment:
-      - WATCHPACK_POLLING=true
-
     # volumes:
-    #   - ./frontend:/app/frontend
+    #   - ./frontend:/app/frontend/volume
 
     depends_on:
       - backend

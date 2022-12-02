@@ -1,6 +1,0 @@
-{
-  "dependencies": {
-    "react-router-dom": "^6.4.4",
-    "react-select": "^5.7.0"
-  }
-}

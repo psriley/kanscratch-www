@@ -3,13 +3,13 @@ import './App.css';
 import { Link } from "react-router-dom";
 import {useState, useEffect} from 'react';
 import Tbar from "./components/topbar";
-import PersonList from "./components/user_list";
+import UserList from "./components/user_list.js";
 
 function App() {
   const [data, setData] = useState(null);
 
   useEffect(() => {
-    fetch('http://localhost:8000/test/')
+    fetch('http://localhost:8000/api/users')
       .then(res => res.json())
       .then(data => setData(data.data));
   })
@@ -47,9 +47,8 @@ function App() {
               </div>
             </div>
           </div>
-          <p></p>
-          <p>Hello</p>
-          <p><PersonList/></p>
+          <UserList/>
+          <p>{data}</p>
         </div>
       </header>
     </div>
