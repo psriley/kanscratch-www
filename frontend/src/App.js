@@ -3,6 +3,7 @@ import './App.css';
 import { Link } from "react-router-dom";
 import {useState, useEffect} from 'react';
 import Tbar from "./components/topbar";
+import PersonList from "./components/user_list";
 
 function App() {
   const [data, setData] = useState(null);
@@ -46,7 +47,9 @@ function App() {
               </div>
             </div>
           </div>
-          <p>{data}</p>
+          <p></p>
+          <p>Hello</p>
+          <p><PersonList/></p>
         </div>
       </header>
     </div>
