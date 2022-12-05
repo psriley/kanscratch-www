@@ -15,8 +15,8 @@ class UserIn(Schema):
     active: bool = True
     password_hash: str = None
     salt: str = None
-    created_on: datetime = timezone.now
-    updated_on: datetime = timezone.now
+    created_on: datetime = None
+    updated_on: datetime = None
     updated_by_id: int = None
 
 class UsersOut(Schema):

@@ -23,6 +23,10 @@ services:
     ports:
       - '3000:3000'
 
+    volumes:
+      - ./frontend/public:/app/frontend/public
+      - ./frontend/src:/app/frontend/src
+
     # volumes:
     #   - ./frontend:/app/frontend/volume
 

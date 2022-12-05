@@ -1,25 +1,33 @@
 import { toBePartiallyChecked } from "@testing-library/jest-dom/dist/matchers";
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import { Link } from "react-router-dom";
 import Tbar from "./components/topbar.js"
+import axios from 'axios';
 
 import "./login.css";
 
 function LogIn() {
     const [errorMessages, setErrorMessages] = useState({});
     const [isSubmitted, setIsSubmitted] = useState(false);
+    const [database, setDatabase] = useState(null);
+
+    useEffect(() => {
+        axios.get('http://localhost:8000/api/users').then((response) => {
+          setDatabase(response.data);
+        });
+      }, []);
 
     // Login info for users
-    const database = [
-        {
-            username: "user1",
-            password: "password"
-        },
-        {
-            username: "user2",
-            password: "password2"
-        },
-    ];
+    // const database = [
+    //     {
+    //         username: "user1",
+    //         password: "password"
+    //     },
+    //     {
+    //         username: "user2",
+    //         password: "password2"
+    //     },
+    // ];
 
     const errors = {
       uname: "Invalid username",
@@ -32,12 +40,11 @@ function LogIn() {
 
         var { uname, pass } = document.forms[0];
 
-        debugger;
         // Find user login info
-        const userData = database.find((user) => user.username === uname.value);
+        const userData = database.find((user) => user.name === uname.value);
 
         if (userData !== undefined) {
-            if (userData.password !== pass.value) {
+            if (userData.password_hash !== pass.value) {
                 // Invalid password
                 setErrorMessages({ name: "pass", message: errors.pass });
             } else {
