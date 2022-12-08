@@ -4,7 +4,7 @@ import CreatableSelect from 'react-select/creatable';
 import { Link } from "react-router-dom";
 import Tbar from "./components/topbar";
 import axios from 'axios';
-//import moment from 'moment';
+import moment from 'moment';
 
 // const SignUp = () => {
 //   return (
@@ -108,10 +108,10 @@ function SignUp() {
             "active": true,
             "password_hash": password,
             "salt": "string",
-            "created_on": new Date().toLocaleString("en-US", { hour12: false }),//moment().format("DD-MM-YYYY hh:mm:ss"),
-            "updated_on": new Date().toLocaleString("en-US", { hour12: false }),
+            "created_on": moment().format(),//moment().format("DD-MM-YYYY hh:mm:ss"),
+            "updated_on": moment().format(),
         }).then((response) => {
-            setDatabase([response.data, ...database]);
+            setDatabase(response.data);
         });
     }
 
