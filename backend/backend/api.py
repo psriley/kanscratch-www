@@ -43,6 +43,11 @@ def list_users(request):
     qs = User.objects.all()
     return qs
 
+@api.post("/users")
+def create_user(request, payload: UserIn):
+    user = User.objects.create(**payload.dict())
+    return {"id": user.id}
+
 # @api.put("/users/{user_id}")
 # def update_user(request, user_id: int):
 #     user = get_object_or_404(User, id=user_id)

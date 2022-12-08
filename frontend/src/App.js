@@ -47,8 +47,6 @@ function App() {
               </div>
             </div>
           </div>
-          <UserList/>
-          <p>{data}</p>
         </div>
       </header>
     </div>
