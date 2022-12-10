@@ -102,10 +102,12 @@ function SignUp() {
     const addUser = (username, password, user_type) => {
         debugger;
         axios.post('http://localhost:8000/api/users', {
+            "username": username,
             "name": username,
             "user_type": user_type,
             "school_id_id": 1,
             "active": true,
+            "password": password,
             "password_hash": password,
             "salt": "string",
             "created_on": moment().format(),//moment().format("DD-MM-YYYY hh:mm:ss"),
