@@ -7,6 +7,11 @@ from projects.models import User
 import json
 from django.core.serializers.json import DjangoJSONEncoder
 from django.shortcuts import get_object_or_404
+from django.contrib.auth.hashers import check_password
+
+class Login(Schema):
+    username: str = None
+    password: str = None
 
 class UserIn(Schema):
     username: str = None
@@ -53,6 +58,24 @@ def list_users(request):
 def create_user(request, payload: UserIn):
     user = User.objects.create_user(**payload.dict())
     return {"id": user.id}
+
+@api.post("/login")
+def user_login(request, payload: Login):
+    response = validate_user(payload)
+    return response
+
+def validate_user(payload):
+    try:
+        user = get_object_or_404(User, username=payload.username)
+    except:
+        return f"No user with the username: {payload.username}"
+
+    resp = check_password(payload.password, user.password)
+    if resp:
+        return "Successful!"
+    else:
+        return "Wrong password!"
+
 
 # @api.put("/users/{user_id}")
 # def update_user(request, user_id: int):
