@@ -18,17 +18,36 @@
 
 FROM python:3.8-alpine
 
-ENV PYTHONUNBUFFERED 1
+WORKDIR /usr/src/app
+
+# set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
 
-WORKDIR /app/backend
+# install psycopg2 dependencies
+RUN apk update \
+    && apk add postgresql-dev gcc python3-dev musl-dev
 
-COPY requirements.txt /app/backend/
+# install dependencies
+RUN pip install --upgrade pip
+COPY ./requirements.txt .
+RUN pip install -r requirements.txt
 
-# Build psycopg2-binary from source -- add required required dependencies
-RUN apk add --virtual .build-deps --no-cache postgresql-dev gcc python3-dev musl-dev && \
-        pip install --no-cache-dir -r requirements.txt && \
-        apk --purge del .build-deps
+# copy entrypoint.sh
+COPY ./entrypoint.sh .
+RUN sed -i 's/\r$//g' /usr/src/app/entrypoint.sh
+RUN chmod +x /usr/src/app/entrypoint.sh
+
+# copy project
+COPY . .
+
+# run entrypoint.sh
+ENTRYPOINT ["/usr/src/app/entrypoint.sh"]
+
+# # Build psycopg2-binary from source -- add required required dependencies
+# RUN apk add --virtual .build-deps --no-cache postgresql-dev gcc python3-dev musl-dev && \
+#         pip install --no-cache-dir -r requirements.txt && \
+#         apk --purge del .build-deps
 
 COPY . /app/backend/
 
