@@ -23,6 +23,24 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data/
 
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+
+    ports:
+      - '3000:3000'
+
+    volumes:
+      - ./frontend/public:/app/frontend/public
+      - ./frontend/src:/app/frontend/src
+
+    # volumes:
+    #   - ./frontend:/app/frontend/volume
+
+    depends_on:
+      - web
+
 volumes:
   postgres_data:
 
