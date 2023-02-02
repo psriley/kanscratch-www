@@ -3,12 +3,13 @@ import './App.css';
 import { Link } from "react-router-dom";
 import {useState, useEffect} from 'react';
 import Tbar from "./components/topbar";
+import UserList from "./components/user_list.js";
 
 function App() {
   const [data, setData] = useState(null);
 
   useEffect(() => {
-    fetch('http://localhost:8000/test/')
+    fetch('http://localhost:8000/api/hello')
       .then(res => res.json())
       .then(data => setData(data.data));
   })
@@ -46,7 +47,6 @@ function App() {
               </div>
             </div>
           </div>
-          <p>{data}</p>
         </div>
       </header>
     </div>

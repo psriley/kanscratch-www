@@ -3,6 +3,8 @@ import Select from 'react-select';
 import CreatableSelect from 'react-select/creatable';
 import { Link } from "react-router-dom";
 import Tbar from "./components/topbar";
+import axios from 'axios';
+import moment from 'moment';
 
 // const SignUp = () => {
 //   return (
@@ -29,28 +31,29 @@ import './login.css'
 function SignUp() {
     const [errorMessages, setErrorMessages] = useState({});
     const [isSubmitted, setIsSubmitted] = useState(false);
+    const [database, setDatabase] = useState(null);
 
     // Login info for users
-    const database = [
-        // useEffect(() => {
-        //   fetch('api/users')
-        //      .then((response) => response.json())
-        //      .then((data) => {
-        //         console.log(data);
-        //      })
-        //      .catch((err) => {
-        //         console.log(err.message);
-        //      });
-        //    }, []),
-        {
-            username: "user1",
-            password: "password"
-        },
-        {
-            username: "user2",
-            password: "password2"
-        },
-    ];
+    // const database = [
+    //     // useEffect(() => {
+    //     //   fetch('api/users')
+    //     //      .then((response) => response.json())
+    //     //      .then((data) => {
+    //     //         console.log(data);
+    //     //      })
+    //     //      .catch((err) => {
+    //     //         console.log(err.message);
+    //     //      });
+    //     //    }, []),
+    //     {
+    //         username: "user1",
+    //         password: "password"
+    //     },
+    //     {
+    //         username: "user2",
+    //         password: "password2"
+    //     },
+    // ];
 
     const errors = {
       uname: "Invalid username",
@@ -61,23 +64,58 @@ function SignUp() {
         // prevent page reload
         event.preventDefault();
 
-        var { uname, pass } = document.forms[0];
+        var { uname, pass, select } = document.forms[0];
+        setIsSubmitted(true);
+    //             // Create user with post api request
+        addUser(uname.value, pass.value, select.value);
 
         // Find user login info
-        const userData = database.find((user) => user.username === uname.value);
+        // const userData = database.find((user) => user.username === uname.value);
 
-        if (userData !== undefined) {
-            if (userData.password !== pass.value) {
-                // Invalid password
-                setErrorMessages({ name: "pass", message: errors.pass });
-            } else {
-                setIsSubmitted(true);
-            }
-        } else {
-            // Username not found
-            setErrorMessages( { name: "uname", message: errors.uname });
-        }
+    //     if (userData !== undefined) {
+    //         if (userData.password !== pass.value) {
+    //             // Invalid password
+    //             setErrorMessages({ name: "pass", message: errors.pass });
+    //         } else {
+    //             setIsSubmitted(true);
+    //             // Create user with post api request
+    //             addUser(uname.value, pass.value, select.value);
+    //             // useEffect(() => {
+    //             //     axios.post('http://localhost:8000/api/users', {
+    //             //         "name": uname.value,
+    //             //         "user_type": select.value,
+    //             //         "school_id_id": 1,
+    //             //         "active": true,
+    //             //         "password_hash": pass.value,
+    //             //         "salt": "string",
+    //             //     }).then((response) => {
+    //             //       setDatabase([response.data, ...database]);
+    //             //     });
+    //             // }, []);
+    //         }
+    //     } else {
+    //         // Username not found
+    //         setErrorMessages( { name: "uname", message: errors.uname });
+    //     }
     };
+
+    const addUser = (username, password, user_type) => {
+        debugger;
+        axios.post('http://localhost:8000/api/users', {
+            "username": username,
+            "name": username,
+            "user_type": user_type,
+            "school_id_id": 1,
+            "active": true,
+            "password": password,
+            "password_hash": password,
+            "salt": "string",
+            "created_on": moment().format(),//moment().format("DD-MM-YYYY hh:mm:ss"),
+            "updated_on": moment().format(),
+        }).then((response) => {
+            setDatabase(response.data);
+        });
+    }
 
     // Generate JSX code for error message
     const renderErrorMessage = (name) =>

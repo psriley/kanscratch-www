@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils import timezone
+from django.contrib.auth.models import AbstractUser
 
 
 class School(models.Model):
@@ -10,7 +11,7 @@ class School(models.Model):
     updated_by = models.ForeignKey('User', on_delete=models.CASCADE, default=None, blank=True, null=True)
 
 
-class User(models.Model):
+class User(AbstractUser):
     name = models.CharField(max_length=200)
     user_type = models.CharField(max_length=50)
     school_id = models.ForeignKey(School, on_delete=models.CASCADE)
