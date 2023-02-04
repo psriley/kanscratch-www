@@ -13,10 +13,12 @@ import {
   Routes,
   Route,
 } from "react-router-dom";
+import Tbar from './components/topbar';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <Router>
+    <Tbar/>
     <Routes>
       <Route path="/" element={<App/>} />
       <Route path="/about" element={<About/>} />

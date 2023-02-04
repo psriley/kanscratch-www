@@ -1,18 +1,17 @@
-import { toBePartiallyChecked } from "@testing-library/jest-dom/dist/matchers";
-import React, {useState, useEffect} from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import Tbar from "./components/topbar.js"
-import axios from 'axios';
+import axios from "axios";
 
 import "./login.css";
 
 function LogIn() {
-    const [errorMessages, setErrorMessages] = useState({});
-    const [isSubmitted, setIsSubmitted] = useState(false);
+    const [errorMessages, setErrorMessages] = React.useState({});
+    const [isSubmitted, setIsSubmitted] = React.useState(false);
     //const [database, setDatabase] = useState(null);
-    const [resp, setResponse] = useState(null);
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
+    const [resp, setResponse] = React.useState(null);
+    const [username, setUsername] = React.useState('');
+    const [password, setPassword] = React.useState('');
 
     // useEffect(() => {
     //     axios.get('http://localhost:8000/api/users').then((response) => {
@@ -184,7 +183,6 @@ function LogIn() {
     return (
         <div className="App">
             <header className="App-header">
-                <Tbar/>
                 <div className="login-form">
                     <div className="title">Log In</div>
                     {isSubmitted ? <div>User is successfully logged in</div> : renderForm}
