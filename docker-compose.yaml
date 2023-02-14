@@ -1,7 +1,15 @@
 version: '3.9'
 
-
 services:
+  web:
+    build: ./backend
+    command: python3 manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./backend/:/usr/src/app/
+    ports:
+      - 8000:8000
+    env_file:
+      - ./.env.dev
   db:
     image: postgres:14-alpine
     ports:
@@ -13,7 +21,7 @@ services:
       - POSTGRES_DB=postgres
 
     volumes:
-      - ./data/db:/var/lib/postgresql/data/
+      - postgres_data:/var/lib/postgresql/data/
 
   frontend:
     build:
@@ -31,25 +39,63 @@ services:
     #   - ./frontend:/app/frontend/volume
 
     depends_on:
-      - backend
+      - web
 
-  backend: 
-    build: 
-      context: ./backend
-      dockerfile: Dockerfile
+volumes:
+  postgres_data:
 
-    environment:
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_USER=postgres
-      - POSTGRES_DB=postgres
-    env_file:
-      - ./.env
+# version: '3.9'
 
-    ports:
-      - '8000:8000'
 
-    volumes:
-      - ./backend:/app/backend
+# services:
+#   db:
+#     image: postgres:14-alpine
+#     ports:
+#       - '5432:5432'
 
-    depends_on:
-      - db
+#     environment:
+#       - POSTGRES_PASSWORD=postgres
+#       - POSTGRES_USER=postgres
+#       - POSTGRES_DB=postgres
+
+#     volumes:
+#       - ./data/db:/var/lib/postgresql/data/
+
+#   frontend:
+#     build:
+#       context: ./frontend
+#       dockerfile: Dockerfile
+
+#     ports:
+#       - '3000:3000'
+
+#     volumes:
+#       - ./frontend/public:/app/frontend/public
+#       - ./frontend/src:/app/frontend/src
+
+#     # volumes:
+#     #   - ./frontend:/app/frontend/volume
+
+#     depends_on:
+#       - backend
+
+#   backend: 
+#     build: 
+#       context: ./backend
+#       dockerfile: Dockerfile
+
+#     environment:
+#       - POSTGRES_PASSWORD=postgres
+#       - POSTGRES_USER=postgres
+#       - POSTGRES_DB=postgres
+#     env_file:
+#       - ./.env
+
+#     ports:
+#       - '8000:8000'
+
+#     volumes:
+#       - ./backend:/app/backend
+
+#     depends_on:
+#       - db
