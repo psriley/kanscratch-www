@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: signup.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: signup.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, {useState, useEffect} from "react";
+import Select from 'react-select';
+import CreatableSelect from 'react-select/creatable';
+import { Link } from "react-router-dom";
+import Tbar from "./components/topbar";
+import axios from 'axios';
+import moment from 'moment';
+import './login.css'
+
+
+/**
+ * SignUp form that creates a user with the inputted username and password information.
+ * @function
+ */
+function SignUp() {
+    const [errorMessages, setErrorMessages] = useState({});
+    const [isSubmitted, setIsSubmitted] = useState(false);
+    const [database, setDatabase] = useState(null);
+
+    const errors = {
+      uname: "Invalid username",
+      pass: "Invalid password"
+    };
+
+    const handleSubmit = (event) => {
+        // prevent page reload
+        event.preventDefault();
+
+        var { uname, pass, select } = document.forms[0];
+        setIsSubmitted(true);
+        // Create user with post api request
+        addUser(uname.value, pass.value, select.value);
+    };
+
+    const addUser = (username, password, user_type) => {
+        axios.post('http://localhost:8000/api/users', {
+            "username": username,
+            "name": username,
+            "user_type": user_type,
+            "school_id_id": 1,
+            "active": true,
+            "password": password,
+            "password_hash": password,
+            "salt": "string",
+            "created_on": moment().format(),//moment().format("DD-MM-YYYY hh:mm:ss"),
+            "updated_on": moment().format(),
+        }).then((response) => {
+            setDatabase(response.data);
+        });
+    }
+
+    // Generate JSX code for error message
+    const renderErrorMessage = (name) =>
+        name === errorMessages.name &amp;&amp; (
+          &lt;div className="error">{errorMessages.message}&lt;/div>
+        );
+
+
+    const options = [
+      { value: 'student', label: 'Student' },
+      { value: 'teacher', label: 'Teacher' }
+    ];
+
+    // JSX code for login form
+    const renderForm = (
+        &lt;div className="form">
+            &lt;form onSubmit={handleSubmit}>
+                &lt;div className="input-container">
+                    &lt;label>Username&lt;/label>
+                    &lt;input type="text" name="uname" autoComplete="off" required />
+                    {/*{renderErrorMessage("uname")}*/}
+                &lt;/div>
+                &lt;div className="input-container">
+                    &lt;label>Password&lt;/label>
+                    &lt;input type="password" name="pass" required />
+                    {/*{renderErrorMessage("pass")}*/}
+                &lt;/div>
+                &lt;div className="input-container">
+                    &lt;label>Email&lt;/label>
+                    &lt;input type="text" name="email" autoComplete="off" required />
+                    {/*&lt;p className="help-text">Help Text&lt;/p>*/}
+                    {/*{renderErrorMessage("email")}*/}
+                &lt;/div>
+                &lt;div className="input-container">
+                    &lt;label>Are you a student or a teacher?&lt;/label>
+                    &lt;Select name="select" options={options} />
+                    {/*{renderErrorMessage("email")}*/}
+                &lt;/div>
+                &lt;div className="button-container">
+                    &lt;input className="submit" type="submit" />
+                &lt;/div>
+            &lt;/form>
+        &lt;/div>
+      );
+
+    return (
+        &lt;div className="App">
+            &lt;header className="App-header">
+                &lt;div className="login-form">
+                    &lt;div className="title">Sign Up&lt;/div>
+                    {/* if the isSubmitted is truthy, a form is rendered that says that they successfully signed up*/}
+                    {isSubmitted ? &lt;div>User successfully signed up&lt;/div> : renderForm}
+                &lt;/div>
+            &lt;/header>
+        &lt;/div>
+    )
+}
+
+export default SignUp;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#SignUp">SignUp</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.1</a> on Fri Feb 17 2023 21:19:29 GMT-0600 (Central Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
