@@ -4,6 +4,14 @@ import { Link } from "react-router-dom";
 import {useState, useEffect} from 'react';
 import Tbar from "./components/topbar";
 import UserList from "./components/user_list.js";
+import Gui, {AppStateHOC} from "scratch-gui";
+// wrap gui in AppStateHOC
+
+const appTarget = document.getElementById("root");
+
+Gui.setAppElement(appTarget);
+
+const WrappedGui = AppStateHOC(Gui);
 
 function App() {
   const [data, setData] = useState(null);
@@ -17,8 +25,8 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <Tbar/>
         <div className="Content">
+        <WrappedGui/>
           <div className="Container">
             <div className="Container">
                 <div className="Classrooms">

@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom/client';
+import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import About from './about';
@@ -15,8 +15,11 @@ import {
 } from "react-router-dom";
 import Tbar from './components/topbar';
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
+
+/**
+ * Renders the Routes and navigation bar (Tbar) on the DOM root element.
+ */
+ReactDOM.render(
   <Router>
     <Tbar/>
     <Routes>
@@ -28,6 +31,7 @@ root.render(
       <Route path="/details" element={<Details/>} />
     </Routes>
   </Router>
+  , document.getElementById('root')
 );
 
 
