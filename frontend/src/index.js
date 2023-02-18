@@ -15,7 +15,10 @@ import {
 } from "react-router-dom";
 import Tbar from './components/topbar';
 
-//const root = ReactDOM.createRoot(document.getElementById('root'));
+
+/**
+ * Renders the Routes and navigation bar (Tbar) on the DOM root element.
+ */
 ReactDOM.render(
   <Router>
     <Tbar/>

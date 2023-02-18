@@ -10,11 +10,13 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth.hashers import check_password
 
 
+"""Schema used to validate user's username and password on login."""
 class Login(Schema):
     username: str = None
     password: str = None
 
 
+"""Schema that is used to create a new user in the database."""
 class UserIn(Schema):
     username: str = None
     name: str = None
@@ -29,6 +31,7 @@ class UserIn(Schema):
     updated_by_id: int = None
 
 
+"""Schema that is used to retrieve a list of users in the database"""
 class UsersOut(Schema):
     id: int
     username: str
@@ -44,32 +47,35 @@ class UsersOut(Schema):
     updated_by_id: int = None
 
 
+# api object used in urls.py.
 api = NinjaAPI()
 
 
-@api.get("/hello")
-def hello(request, name="user"):
-    return f"Hello {name}"
-
-
+"""Retrieves a list of all users."""
 @api.get("/users", response=List[UsersOut])
 def list_users(request):
     qs = User.objects.all()
     return qs
 
 
+"""Creates a user object."""
 @api.post("/users")
 def create_user(request, payload: UserIn):
     user = User.objects.create_user(**payload.dict())
     return {"id": user.id}
 
 
+"""Validates a user trying to login to make sure they are in the database."""
 @api.post("/login")
 def user_login(request, payload: Login):
     response = validate_user(payload)
     return response
 
 
+"""
+Provides a User object and checks their password is correct, otherwise
+returns an appropriate error message.
+"""
 def validate_user(payload):
     try:
         user = get_object_or_404(User, username=payload.username)

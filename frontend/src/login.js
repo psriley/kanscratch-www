@@ -5,60 +5,17 @@ import axios from "axios";
 
 import "./login.css";
 
+
+/**
+ * LogIn form that validates user's username and password information to log them in.
+ * @function
+ */
 function LogIn() {
     const [errorMessages, setErrorMessages] = React.useState({});
     const [isSubmitted, setIsSubmitted] = React.useState(false);
-    //const [database, setDatabase] = useState(null);
     const [resp, setResponse] = React.useState(null);
     const [username, setUsername] = React.useState('');
     const [password, setPassword] = React.useState('');
-
-    // useEffect(() => {
-    //     axios.get('http://localhost:8000/api/users').then((response) => {
-    //       setDatabase(response.data);
-    //     });
-    //   }, []);
-    
-    
-
-    // Login info for users
-    // const database = [
-    //     {
-    //         username: "user1",
-    //         password: "password"
-    //     },
-    //     {
-    //         username: "user2",
-    //         password: "password2"
-    //     },
-    // ];
-
-    // function validateLogin() {
-    //     if (resp !== undefined) {
-    //         if (resp === "Successful!") {
-    //             setIsSubmitted(true);
-    //         } else if (resp === "Wrong password!") {
-    //             setErrorMessages({ name: "pass", message: errors.pass });
-    //         } else {
-    //             setErrorMessages( { name: "uname", message: errors.uname });
-    //         }
-    //     } else {
-    //         // Nothing was entered
-    //         console.log("Nothing has been entered");
-    //     }
-    // }
-
-    // function postLogin() {
-    //     const post = { username: username, password: password };
-        
-
-    //     // axios.post('http://localhost:8000/api/login', {
-    //     //     "username": username,
-    //     //     "password": password
-    //     // }).then((response) => {
-    //     //     setResponse(response.data);
-    //     // });
-    // }
 
     const errors = {
       uname: "Invalid username",
@@ -68,52 +25,8 @@ function LogIn() {
     const handleSubmit = (event) => {
         // prevent page reload
         event.preventDefault();
-
-        //var { uname, pass } = document.forms[0];
         
         onPost();
-        //validate();
-
-        // postLogin();
-        // validateLogin();
-
-        // Find user login info
-        //const userData = database.find((user) => user.name === uname.value);
-
-        // useEffect(() => {
-        //     postLogin();
-        // }, [])
-        // useEffect(() => {
-        //     if (resp !== undefined) {
-        //         if (resp === "Successful!") {
-        //             setIsSubmitted(true);
-        //         } else if (resp === "Wrong password!") {
-        //             setErrorMessages({ name: "pass", message: errors.pass });
-        //         } else {
-        //             setErrorMessages( { name: "uname", message: errors.uname });
-        //         }
-        //     } else {
-        //         // Nothing was entered
-        //         console.log("Nothing has been entered");
-        //     }
-        // }, [])
-
-        // const postLogin = async() => {
-        //     const response = await axios('http://localhost:8000/api/login');
-        //     setResponse(response.data);
-        // }
-
-        // if (userData !== undefined) {
-        //     if (userData.password_hash !== pass.value) {
-        //         // Invalid password
-        //         setErrorMessages({ name: "pass", message: errors.pass });
-        //     } else {
-        //         setIsSubmitted(true);
-        //     }
-        // } else {
-        //     // Username not found
-        //     setErrorMessages( { name: "uname", message: errors.uname });
-        // }
     };
 
     const onPost = async (e) => {
@@ -137,21 +50,6 @@ function LogIn() {
             alert(e);
         }
     };
-
-    // const validate = async (e) => {
-    //     if (resp !== undefined) {
-    //         if (resp === "Successful!") {
-    //             setIsSubmitted(true);
-    //         } else if (resp === "Wrong password!") {
-    //             setErrorMessages({ name: "pass", message: errors.pass });
-    //         } else {
-    //             setErrorMessages( { name: "uname", message: errors.uname });
-    //         }
-    //     } else {
-    //         // Nothing was entered
-    //         console.log("Nothing has been entered");
-    //     }
-    // }
 
     // Generate JSX code for error message
     const renderErrorMessage = (name) =>
