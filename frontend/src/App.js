@@ -25,7 +25,6 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <Tbar/>
         <div className="Content">
         <WrappedGui/>
           <div className="Container">

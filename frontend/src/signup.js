@@ -5,55 +5,17 @@ import { Link } from "react-router-dom";
 import Tbar from "./components/topbar";
 import axios from 'axios';
 import moment from 'moment';
-
-// const SignUp = () => {
-//   return (
-//     <div className="App">
-//       <header className="App-header">
-//         <Tbar/>
-//         <h1 className="title">Sign up</h1>
-//         <div className="inputBox">
-//           <div className="labelText">Username:</div>
-//           <div><input type="text"></input></div>
-//         </div>
-//         <div className="inputBox">
-//           <div className="labelText">Password:</div>
-//           <div><input type="password"></input></div>
-//         </div>
-//         <div><button>Sign In</button></div>
-//       </header>
-//     </div>
-//   );
-// };
-
 import './login.css'
 
+
+/**
+ * SignUp form that creates a user with the inputted username and password information.
+ * @function
+ */
 function SignUp() {
     const [errorMessages, setErrorMessages] = useState({});
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [database, setDatabase] = useState(null);
-
-    // Login info for users
-    // const database = [
-    //     // useEffect(() => {
-    //     //   fetch('api/users')
-    //     //      .then((response) => response.json())
-    //     //      .then((data) => {
-    //     //         console.log(data);
-    //     //      })
-    //     //      .catch((err) => {
-    //     //         console.log(err.message);
-    //     //      });
-    //     //    }, []),
-    //     {
-    //         username: "user1",
-    //         password: "password"
-    //     },
-    //     {
-    //         username: "user2",
-    //         password: "password2"
-    //     },
-    // ];
 
     const errors = {
       uname: "Invalid username",
@@ -66,37 +28,8 @@ function SignUp() {
 
         var { uname, pass, select } = document.forms[0];
         setIsSubmitted(true);
-    //             // Create user with post api request
+        // Create user with post api request
         addUser(uname.value, pass.value, select.value);
-
-        // Find user login info
-        // const userData = database.find((user) => user.username === uname.value);
-
-    //     if (userData !== undefined) {
-    //         if (userData.password !== pass.value) {
-    //             // Invalid password
-    //             setErrorMessages({ name: "pass", message: errors.pass });
-    //         } else {
-    //             setIsSubmitted(true);
-    //             // Create user with post api request
-    //             addUser(uname.value, pass.value, select.value);
-    //             // useEffect(() => {
-    //             //     axios.post('http://localhost:8000/api/users', {
-    //             //         "name": uname.value,
-    //             //         "user_type": select.value,
-    //             //         "school_id_id": 1,
-    //             //         "active": true,
-    //             //         "password_hash": pass.value,
-    //             //         "salt": "string",
-    //             //     }).then((response) => {
-    //             //       setDatabase([response.data, ...database]);
-    //             //     });
-    //             // }, []);
-    //         }
-    //     } else {
-    //         // Username not found
-    //         setErrorMessages( { name: "uname", message: errors.uname });
-    //     }
     };
 
     const addUser = (username, password, user_type) => {
@@ -163,9 +96,9 @@ function SignUp() {
     return (
         <div className="App">
             <header className="App-header">
-                <Tbar/>
                 <div className="login-form">
                     <div className="title">Sign Up</div>
+                    {/* if the isSubmitted is truthy, a form is rendered that says that they successfully signed up*/}
                     {isSubmitted ? <div>User successfully signed up</div> : renderForm}
                 </div>
             </header>
