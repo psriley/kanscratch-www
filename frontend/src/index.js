@@ -21,7 +21,6 @@ import Tbar from './components/topbar';
  */
 ReactDOM.render(
   <Router>
-    <Tbar/>
     <Routes>
       <Route path="/" element={<App/>} />
       <Route path="/about" element={<About/>} />
