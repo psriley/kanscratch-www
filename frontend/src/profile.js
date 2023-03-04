@@ -11,6 +11,7 @@ const Profile = () => {
   return (
     <div className="App">
       <header className="App-header">
+        <Tbar/>
         <h1 className="title">Profile</h1>
       </header>
     </div>

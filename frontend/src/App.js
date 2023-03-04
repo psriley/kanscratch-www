@@ -3,59 +3,58 @@ import './App.css';
 import { Link } from "react-router-dom";
 import {useState, useEffect} from 'react';
 import Tbar from "./components/topbar";
-import UserList from "./components/user_list.js";
-import Gui, {AppStateHOC} from "scratch-gui";
-// wrap gui in AppStateHOC
+import ItemBox from "./components/item_box";
+import Modal from './components/modal';
 
-const appTarget = document.getElementById("root");
-
-Gui.setAppElement(appTarget);
-
-const WrappedGui = AppStateHOC(Gui);
-
+/**
+ * Functional component that contains the main view (right now just the main student view).
+ * @function
+ */
 function App() {
   const [data, setData] = useState(null);
+  const [showModal, setShowModal] = useState(false);
 
-  useEffect(() => {
-    fetch('http://localhost:8000/api/hello')
-      .then(res => res.json())
-      .then(data => setData(data.data));
-  })
+  const handleShowModal = () => {
+    setShowModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <div className="Content">
-          <div className="Container">
-            <div className="Container">
-                <div className="Classrooms">
-                  Classrooms
-                  <div style={{display: "flex", flexWrap: "wrap", flexDirection: "column", border: "2px solid red"}}>
-                    Looks like you don't have any classrooms yet.
-                  </div>
-                </div>
-                <div className="Assignments">
-                  Assignments
-                  <div style={{gap: "1vh", display: "flex", flexWrap: "wrap", flexDirection: "column", border: "2px solid red"}}>
-                    <img src={placeholder}/>
-                    <img src={placeholder}/>
-                    <img src={placeholder}/>
-                  </div>
-                </div>
+    <div className='App'>
+      <header className='App-header'>
+        <Tbar/>
+      </header>
+      <div id='body'>
+        <Modal show={showModal} handleClose={handleCloseModal}>
+          <div className='codeBox'>
+            <div id='codeDiv'>
+              <input className='classCode' type='text'/>
             </div>
-            <div>
-              <div className="AssignmentView">
-                <div>
-                  Details
-                  <Link to="/details">
-                    <img src={placeholder}/>
-                  </Link>
-                </div>
-              </div>
+            <div className='buttonDiv'>
+              <button className='codeButton'>Join</button>
             </div>
           </div>
+        </Modal>
+        <div>
+          <div id='Header'>
+            <span>Classrooms</span>
+            <button name='join' onClick={handleShowModal}>Join</button>
+          </div>
+          <ItemBox text={'Classroom'}/>
         </div>
-      </header>
+
+        <div>
+          <div id='Header'>
+            <span>Projects</span>
+          </div>
+          <div className='ProjectList'>
+            <ItemBox text={'Project'}/>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
