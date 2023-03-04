@@ -24,8 +24,15 @@ function App() {
         <Tbar/>
       </header>
       <div id='body'>
-        <Modal show={showModal} handleClose={handleCloseModal}> 
-          <p>Modal content goes here.</p>
+        <Modal show={showModal} handleClose={handleCloseModal}>
+          <div className='codeBox'>
+            <div id='codeDiv'>
+              <input className='classCode' type='text'/>
+            </div>
+            <div className='buttonDiv'>
+              <button className='codeButton'>Join</button>
+            </div>
+          </div>
         </Modal>
         <div>
           <div id='Header'>
