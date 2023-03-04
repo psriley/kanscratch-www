@@ -7,6 +7,7 @@ import SignUp from './signup';
 import LogIn from './login';
 import Profile from './profile';
 import Details from './details';
+import Help from  './help';
 import reportWebVitals from './reportWebVitals';
 import {
   BrowserRouter as Router,
@@ -23,6 +24,7 @@ ReactDOM.render(
   <Router>
     <Routes>
       <Route path="/" element={<App/>} />
+      <Route path="/help" element={<Help/>} />
       <Route path="/about" element={<About/>} />
       <Route path="/signup" element={<SignUp/>} />
       <Route path="/login" element={<LogIn/>} />

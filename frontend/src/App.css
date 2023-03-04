@@ -13,20 +13,19 @@ html {
   padding: 0;
 }
 
-/* Set background color and font */
-/* body {
-  background-color: #f5f5f5;
-  font-family: Arial, sans-serif;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 5vw;
-} */
+strong {
+  color: red;
+}
 
 div #body {
   font-family: Arial, sans-serif;
   display: flex;
   justify-content: space-evenly;
   margin: auto 5vh;
+}
+
+.title {
+  margin: 2vh auto;
 }
 
 /* Add styles to the header */
@@ -298,10 +297,6 @@ footer p {
   margin: 10px;
   border-right: 10px solid black;
 }
-
-/* .vertical {
-  border-left: 10px solid black;
-} */
 
 .display-block {
   display: block;

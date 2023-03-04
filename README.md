@@ -11,12 +11,14 @@
     - You could also do this with  `touch {name-of-file}` in the terminal and `echo {file-contents-in-example-env-file} > {name-of-file}`
 7. Create a the following environment files:
     - `.env.dev` (this will be used for storing development environment variables)
-        - Example file: 'example.env.dev' in the root project files
+        - Example file: 'example.env.dev' in the documentation project directory
     - `.env.prod` (this will be used for storing production environment variables)
-        - Example file: 'example.env.prod' in the root project files
+        - Example file: 'example.env.prod' in the documentation project directory
     - `.env.prod.db` (this will store production database information)
-        - Example file: 'example.env.prod.db' in the root project files
+        - Example file: 'example.env.prod.db' in the documentation project directory
 8. In a linux terminal (Ubuntu if you followed the above WSL tutorial) run `docker-compose build`
 9. Run `docker-compose up` to start containers, and you should be ready for development!
 10. Visit 127.0.0.1:8000 to see the backend (api docs are at 127.0.0.1:8000/api/docs), and 127.0.0.1:3000 to see the frontend
 10. Run `docker-compose down` to stop containers when you are done.
+
+# *Documentation for developers can be found in the `documentation` directory of the project*

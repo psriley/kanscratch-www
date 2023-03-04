@@ -13,6 +13,12 @@ function Tbar(){
             </Link>
             
             <ul>
+                <Link to="/help">
+                    <li>
+                        <div className="">Help?</div>
+                    </li>
+                </Link>
+
                 <Link to="/about">
                     <li>
                         <div className="btn navigation">About</div>

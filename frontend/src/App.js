@@ -6,6 +6,10 @@ import Tbar from "./components/topbar";
 import ItemBox from "./components/item_box";
 import Modal from './components/modal';
 
+/**
+ * Functional component that contains the main view (right now just the main student view).
+ * @function
+ */
 function App() {
   const [data, setData] = useState(null);
   const [showModal, setShowModal] = useState(false);
