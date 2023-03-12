@@ -27,7 +27,7 @@ function App() {
       <header className='App-header'>
         <Tbar/>
       </header>
-      <div id='body'>
+      <div id='content'>
         <Modal show={showModal} handleClose={handleCloseModal}>
           <div className='codeBox'>
             <div id='codeDiv'>

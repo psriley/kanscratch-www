@@ -97,12 +97,14 @@ function SignUp() {
         <div className="App">
             <header className="App-header">
                 <Tbar/>
+            </header>
+            <div id="content">
                 <div className="login-form">
-                    <div className="title">Sign Up</div>
+                    <div className="title-grey">Sign Up</div>
                     {/* if the isSubmitted is truthy, a form is rendered that says that they successfully signed up*/}
                     {isSubmitted ? <div>User successfully signed up</div> : renderForm}
                 </div>
-            </header>
+            </div>
         </div>
     )
 }

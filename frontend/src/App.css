@@ -13,19 +13,39 @@ html {
   padding: 0;
 }
 
+label {
+  color: #333;
+}
+
+#react-select-2-listbox {
+  color: #333;
+}
+
+.title {
+  border-bottom: 2px solid #F1AD02;
+  font-family: madeSunflower;
+  font-size: 25px;
+  margin: 2vh auto 20px auto;
+  color: white;
+}
+
+.title-grey {
+  border-bottom: 2px solid #F1AD02;
+  font-family: madeSunflower;
+  font-size: 25px;
+  margin: 2vh auto 20px auto;
+  color: #333;
+}
+
 strong {
   color: red;
 }
 
-div #body {
+div #content {
   font-family: Arial, sans-serif;
   display: flex;
   justify-content: space-evenly;
   margin: auto 5vh;
-}
-
-.title {
-  margin: 2vh auto;
 }
 
 /* Add styles to the header */
