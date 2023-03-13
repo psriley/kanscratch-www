@@ -19,13 +19,10 @@ class Login(Schema):
 """Schema that is used to create a new user in the database."""
 class UserIn(Schema):
     username: str = None
-    name: str = None
-    user_type: str
-    school_id_id: int = None
-    active: bool = True
-    password_hash: str = None
+    type: str = 'Instructor'
+    is_superuser: bool = False
+    is_active: bool = True
     password: str = None
-    salt: str = None
     created_on: datetime = None
     updated_on: datetime = None
     updated_by_id: int = None
@@ -34,14 +31,11 @@ class UserIn(Schema):
 """Schema that is used to retrieve a list of users in the database"""
 class UsersOut(Schema):
     id: int
-    username: str
-    name: str
-    user_type: str
-    school_id_id: int = None
-    active: bool = True
+    username: str = None
+    type: str = 'Instructor'
+    is_superuser: bool = False
+    is_active: bool = True
     password_hash: str = None
-    password: str
-    salt: str = None
     created_on: datetime = None
     updated_on: datetime = None
     updated_by_id: int = None
