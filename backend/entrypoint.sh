@@ -12,6 +12,8 @@ then
 fi
 
 python3 manage.py flush --no-input
+echo "Seeding database..."
+python3 manage.py loaddata initial.json
 python3 manage.py migrate
 
 exec "$@"
