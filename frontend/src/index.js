@@ -14,7 +14,6 @@ import {
   Routes,
   Route,
 } from "react-router-dom";
-import Tbar from './components/topbar';
 
 
 /**
@@ -29,7 +28,8 @@ ReactDOM.render(
       <Route path="/signup" element={<SignUp/>} />
       <Route path="/login" element={<LogIn/>} />
       <Route path="/profile" element={<Profile/>} />
-      <Route path="/details" element={<Details/>} />
+      <Route path="/project/:id" element={<Details/>} />
+      {/*<Route path="/classroom/:id" element={<Details/>} />*/}
     </Routes>
   </Router>
   , document.getElementById('root')

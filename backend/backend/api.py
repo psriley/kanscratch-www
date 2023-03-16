@@ -1,14 +1,12 @@
 from ninja import NinjaAPI
 from ninja import Schema
-from django.utils import timezone
 from datetime import datetime
 from typing import List
-from projects.models import User, Class, Instructor
-import json
-from django.core.serializers.json import DjangoJSONEncoder
+from projects.models import User, Class, Project
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.hashers import check_password
 
+#region Schemas
 
 """Schema used to validate user's username and password on login."""
 class Login(Schema):
@@ -69,6 +67,16 @@ class ClassOut(Schema):
     updated_by_id: int = 1
 
 
+"""Schema that is used to retrieve a list of classes in the database"""
+class ProjectOut(Schema):
+    name: str = "Project 1"
+    description: str = "project description",
+    class_id: int = 1,
+    created_by_id: int = 1,
+    updated_by_id: int = 1
+
+# endregion
+
 # api object used in urls.py.
 api = NinjaAPI()
 
@@ -104,10 +112,17 @@ def create_class(request, payload: ClassIn):
     return {"id": c.id}
 
 
-"""Retrieves a list of all users."""
+"""Retrieves a list of all classes."""
 @api.get("/classes", response=List[ClassOut])
 def list_classes(request):
     qs = Class.objects.all()
+    return qs
+
+
+"""Retrieves a list of all projects."""
+@api.get("/projects", response=List[ProjectOut])
+def list_projects(request):
+    qs = Project.objects.all()
     return qs
 
 

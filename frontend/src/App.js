@@ -1,10 +1,9 @@
-import placeholder from './images/placeholder.png'
 import './App.css';
-import { Link } from "react-router-dom";
-import {useState, useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 import Tbar from "./components/topbar";
 import ItemBox from "./components/item_box";
 import Modal from './components/modal';
+import axios from "axios";
 
 /**
  * Functional component that contains the main view (right now just the main student view).
@@ -13,6 +12,24 @@ import Modal from './components/modal';
 function App() {
   const [data, setData] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const [classes, setClasses] = useState([]);
+  const [projects, setProjects] = useState([]);
+
+  useEffect(() => {
+    axios.get('http://localhost:8000/api/classes')
+      .then(res => {
+          const classes = res.data;
+          setClasses(classes);
+      })
+  }, []);
+
+  useEffect(() => {
+    axios.get('http://localhost:8000/api/projects')
+      .then(res => {
+          const projects = res.data;
+          setProjects(projects);
+      })
+  }, []);
 
   const handleShowModal = () => {
     setShowModal(true);
@@ -43,7 +60,7 @@ function App() {
             <span>Classrooms</span>
             <button name='join' onClick={handleShowModal}>Join</button>
           </div>
-          <ItemBox text={'Classroom'}/>
+          <ItemBox text={'classroom'} list={classes} />
         </div>
 
         <div>
@@ -51,7 +68,7 @@ function App() {
             <span>Projects</span>
           </div>
           <div className='ProjectList'>
-            <ItemBox text={'Project'}/>
+            <ItemBox text={'project'} list={projects} />
           </div>
         </div>
       </div>
