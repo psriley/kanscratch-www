@@ -3,7 +3,7 @@ from ninja import Schema
 from django.utils import timezone
 from datetime import datetime
 from typing import List
-from projects.models import User
+from projects.models import User, Class, Instructor
 import json
 from django.core.serializers.json import DjangoJSONEncoder
 from django.shortcuts import get_object_or_404
@@ -28,7 +28,7 @@ class UserIn(Schema):
     updated_by_id: int = None
 
 
-"""Schema that is used to retrieve a list of users in the database"""
+"""Schema that is used to retrieve a list of users in the database."""
 class UsersOut(Schema):
     id: int
     username: str = None
@@ -39,6 +39,34 @@ class UsersOut(Schema):
     created_on: datetime = None
     updated_on: datetime = None
     updated_by_id: int = None
+
+
+class InstructorOut(Schema):
+    id: int
+
+
+"""Schema that is used to create a new class in the database."""
+class ClassIn(Schema):
+    name: str = "Class 1"
+    class_code_hash: str = None
+    instructor: InstructorOut
+    active: bool = True
+    created_on: datetime = None
+    updated_on: datetime = None
+    created_by_id: int = 1
+    updated_by_id: int = 1
+
+
+"""Schema that is used to retrieve a list of classes in the database"""
+class ClassOut(Schema):
+    name: str = "Class 1"
+    class_code_hash: str = None
+    instructor: InstructorOut
+    active: bool = True
+    created_on: datetime = None
+    updated_on: datetime = None
+    created_by_id: int = 1
+    updated_by_id: int = 1
 
 
 # api object used in urls.py.
@@ -64,6 +92,23 @@ def create_user(request, payload: UserIn):
 def user_login(request, payload: Login):
     response = validate_user(payload)
     return response
+
+
+# def list_instructors(request)
+
+
+"""Creates a class object."""
+@api.post("/class")
+def create_class(request, payload: ClassIn):
+    c = Class.objects.create_class(**payload.dict())
+    return {"id": c.id}
+
+
+"""Retrieves a list of all users."""
+@api.get("/classes", response=List[ClassOut])
+def list_classes(request):
+    qs = Class.objects.all()
+    return qs
 
 
 """

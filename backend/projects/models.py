@@ -2,6 +2,7 @@ from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import AbstractUser
 
+from projects.managers import ClassManager, UManager
 
 """
 Describes the User object that is used to identify a user.
@@ -18,6 +19,8 @@ class User(AbstractUser):
     updated_on = models.DateTimeField(default=timezone.now)
     updated_by = models.ForeignKey('self', on_delete=models.CASCADE, default=None, blank=True, null=True)
 
+    objects = UManager()
+
 
 class Instructor(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -31,6 +34,7 @@ class Student(models.Model):
 Describes the Class object that is used to identify a class or classes that a user is part of.
 """
 class Class(models.Model):
+    #TODO: Need to add a "color" that designates the color that associates projects and classrooms in this class
     instructor = models.ForeignKey(Instructor, on_delete=models.CASCADE)
     name = models.CharField(max_length=200)
     class_code_hash = models.CharField(max_length=250)
@@ -39,6 +43,8 @@ class Class(models.Model):
     created_by = models.ForeignKey(User, related_name='class_created_user', on_delete=models.CASCADE)
     updated_on = models.DateTimeField(default=timezone.now)
     updated_by = models.ForeignKey(User, related_name='class_updated_user', on_delete=models.CASCADE)
+
+    objects = ClassManager()
 
 
 """
