@@ -8,5 +8,5 @@ Returns a list of all users in the system using DRF.
 @api_view(['GET'])
 def users_list(request):
     return Response({
-        "users": f"{list(User.objects.values_list('name', flat=True))}"
+        "users": f"{list(User.objects.values_list('username', flat=True))}"
     })
