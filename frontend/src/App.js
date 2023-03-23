@@ -1,54 +1,77 @@
-import placeholder from './images/placeholder.png'
 import './App.css';
-import { Link } from "react-router-dom";
-import {useState, useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 import Tbar from "./components/topbar";
-import UserList from "./components/user_list.js";
+import ItemBox from "./components/item_box";
+import Modal from './components/modal';
+import axios from "axios";
 
+/**
+ * Functional component that contains the main view (right now just the main student view).
+ * @function
+ */
 function App() {
   const [data, setData] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const [classes, setClasses] = useState([]);
+  const [projects, setProjects] = useState([]);
 
   useEffect(() => {
-    fetch('http://localhost:8000/api/hello')
-      .then(res => res.json())
-      .then(data => setData(data.data));
-  })
+    axios.get('http://localhost:8000/api/classes')
+      .then(res => {
+          const classes = res.data;
+          setClasses(classes);
+      })
+  }, []);
+
+  useEffect(() => {
+    axios.get('http://localhost:8000/api/projects')
+      .then(res => {
+          const projects = res.data;
+          setProjects(projects);
+      })
+  }, []);
+
+  const handleShowModal = () => {
+    setShowModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
 
   return (
-    <div className="App">
-      <header className="App-header">
+    <div className='App'>
+      <header className='App-header'>
         <Tbar/>
-        <div className="Content">
-          <div className="Container">
-            <div className="Container">
-                <div className="Classrooms">
-                  Classrooms
-                  <div style={{display: "flex", flexWrap: "wrap", flexDirection: "column", border: "2px solid red"}}>
-                    Looks like you don't have any classrooms yet.
-                  </div>
-                </div>
-                <div className="Assignments">
-                  Assignments
-                  <div style={{gap: "1vh", display: "flex", flexWrap: "wrap", flexDirection: "column", border: "2px solid red"}}>
-                    <img src={placeholder}/>
-                    <img src={placeholder}/>
-                    <img src={placeholder}/>
-                  </div>
-                </div>
+      </header>
+      <div id='content'>
+        <Modal show={showModal} handleClose={handleCloseModal}>
+          <div className='codeBox'>
+            <div id='codeDiv'>
+              <input className='classCode' type='text'/>
             </div>
-            <div>
-              <div className="AssignmentView">
-                <div>
-                  Details
-                  <Link to="/details">
-                    <img src={placeholder}/>
-                  </Link>
-                </div>
-              </div>
+            <div className='buttonDiv'>
+              <button className='codeButton'>Join</button>
             </div>
           </div>
+        </Modal>
+        <div>
+          <div id='Header'>
+            <span>Classrooms</span>
+            <button name='join' onClick={handleShowModal}>Join</button>
+          </div>
+          <ItemBox text={'classroom'} list={classes} />
         </div>
-      </header>
+
+        <div>
+          <div id='Header'>
+            <span>Projects</span>
+          </div>
+          <div className='ProjectList'>
+            <ItemBox text={'project'} list={projects} />
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

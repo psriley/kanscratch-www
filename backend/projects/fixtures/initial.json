@@ -1,0 +1,39 @@
+[
+  {
+    "model": "projects.user",
+    "pk": 1,
+    "fields": {
+      "username": "psriley",
+      "type": "Instructor"
+    }
+  },
+  {
+    "model": "projects.instructor",
+    "pk": 1,
+    "fields": {
+      "user_id": 1
+    }
+  },
+  {
+    "model": "projects.class",
+    "pk": 1,
+    "fields": {
+      "name": "Class1",
+      "created_by_id": 1,
+      "instructor_id": 1,
+      "class_code_hash": "hash",
+      "updated_by_id": 1
+    }
+  },
+  {
+    "model": "projects.project",
+    "pk": 1,
+    "fields": {
+      "name": "Project1",
+      "description": "blah",
+      "class_id": 1,
+      "created_by_id": 1,
+      "updated_by_id": 1
+    }
+  }
+]

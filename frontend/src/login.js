@@ -1,33 +1,21 @@
-import { toBePartiallyChecked } from "@testing-library/jest-dom/dist/matchers";
-import React, {useState, useEffect} from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import Tbar from "./components/topbar.js"
-import axios from 'axios';
+import axios from "axios";
 
 import "./login.css";
 
+
+/**
+ * LogIn form that validates user's username and password information to log them in.
+ * @function
+ */
 function LogIn() {
-    const [errorMessages, setErrorMessages] = useState({});
-    const [isSubmitted, setIsSubmitted] = useState(false);
-    const [database, setDatabase] = useState(null);
-
-    useEffect(() => {
-        axios.get('http://localhost:8000/api/users').then((response) => {
-          setDatabase(response.data);
-        });
-      }, []);
-
-    // Login info for users
-    // const database = [
-    //     {
-    //         username: "user1",
-    //         password: "password"
-    //     },
-    //     {
-    //         username: "user2",
-    //         password: "password2"
-    //     },
-    // ];
+    const [errorMessages, setErrorMessages] = React.useState({});
+    const [isSubmitted, setIsSubmitted] = React.useState(false);
+    const [resp, setResponse] = React.useState(null);
+    const [username, setUsername] = React.useState('');
+    const [password, setPassword] = React.useState('');
 
     const errors = {
       uname: "Invalid username",
@@ -37,22 +25,29 @@ function LogIn() {
     const handleSubmit = (event) => {
         // prevent page reload
         event.preventDefault();
+        
+        onPost();
+    };
 
-        var { uname, pass } = document.forms[0];
-
-        // Find user login info
-        const userData = database.find((user) => user.name === uname.value);
-
-        if (userData !== undefined) {
-            if (userData.password_hash !== pass.value) {
-                // Invalid password
-                setErrorMessages({ name: "pass", message: errors.pass });
+    const onPost = async (e) => {
+        const post = { username: username, password: password };
+        try {
+            const response = await axios.post('http://localhost:8000/api/login', post);
+            //setResponse(response.data);
+            if (response.data !== undefined) {
+                if (response.data === "Successful!") {
+                    setIsSubmitted(true);
+                } else if (response.data === "Wrong password!") {
+                    setErrorMessages({ name: "pass", message: errors.pass });
+                } else {
+                    setErrorMessages( { name: "uname", message: errors.uname });
+                }
             } else {
-                setIsSubmitted(true);
+                // Nothing was entered
+                console.log("Nothing has been entered");
             }
-        } else {
-            // Username not found
-            setErrorMessages( { name: "uname", message: errors.uname });
+        } catch (e) {
+            alert(e);
         }
     };
 
@@ -68,12 +63,12 @@ function LogIn() {
             <form onSubmit={handleSubmit}>
                 <div className="input-container">
                     <label>Username</label>
-                    <input type="text" name="uname" autoComplete="off" required />
+                    <input type="text" name="uname" autoComplete="off" onChange={e => setUsername(e.target.value)} required />
                     {renderErrorMessage("uname")}
                 </div>
                 <div className="input-container">
                     <label>Password</label>
-                    <input type="password" name="pass" required />
+                    <input type="password" name="pass" onChange={e => setPassword(e.target.value)} required />
                     {renderErrorMessage("pass")}
                 </div>
                 <div className="button-container">
@@ -87,11 +82,13 @@ function LogIn() {
         <div className="App">
             <header className="App-header">
                 <Tbar/>
+            </header>
+            <div id="content">
                 <div className="login-form">
-                    <div className="title">Log In</div>
+                    <div className="title-grey">Log In</div>
                     {isSubmitted ? <div>User is successfully logged in</div> : renderForm}
                 </div>
-            </header>
+            </div>
         </div>
     )
 }

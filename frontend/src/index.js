@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom/client';
+import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import About from './about';
@@ -7,6 +7,7 @@ import SignUp from './signup';
 import LogIn from './login';
 import Profile from './profile';
 import Details from './details';
+import Help from  './help';
 import reportWebVitals from './reportWebVitals';
 import {
   BrowserRouter as Router,
@@ -14,18 +15,24 @@ import {
   Route,
 } from "react-router-dom";
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
+
+/**
+ * Renders the Routes and navigation bar (Tbar) on the DOM root element.
+ */
+ReactDOM.render(
   <Router>
     <Routes>
       <Route path="/" element={<App/>} />
+      <Route path="/help" element={<Help/>} />
       <Route path="/about" element={<About/>} />
       <Route path="/signup" element={<SignUp/>} />
       <Route path="/login" element={<LogIn/>} />
       <Route path="/profile" element={<Profile/>} />
-      <Route path="/details" element={<Details/>} />
+      <Route path="/project/:id" element={<Details/>} />
+      {/*<Route path="/classroom/:id" element={<Details/>} />*/}
     </Routes>
   </Router>
+  , document.getElementById('root')
 );
 
 
