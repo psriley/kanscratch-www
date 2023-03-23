@@ -30,13 +30,15 @@ function LogIn() {
     };
 
     const onPost = async (e) => {
-        const post = { username: username, password: password };
+        const post = { username: username, password_hash: password };
         try {
             const response = await axios.post('http://localhost:8000/api/login', post);
             //setResponse(response.data);
             if (response.data !== undefined) {
                 if (response.data === "Successful!") {
+                    const credentials = post.username;
                     setIsSubmitted(true);
+                    localStorage.setItem("login_credentials", credentials);
                 } else if (response.data === "Wrong password!") {
                     setErrorMessages({ name: "pass", message: errors.pass });
                 } else {

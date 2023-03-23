@@ -2,7 +2,7 @@ from ninja import NinjaAPI
 from ninja import Schema
 from datetime import datetime
 from typing import List
-from projects.models import User, Class, Project
+from projects.models import User, Class, Project, ClassStudents, Student
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.hashers import check_password
 
@@ -11,7 +11,7 @@ from django.contrib.auth.hashers import check_password
 """Schema used to validate user's username and password on login."""
 class Login(Schema):
     username: str = None
-    password: str = None
+    password_hash: str = None
 
 
 """Schema that is used to create a new user in the database."""
@@ -41,6 +41,11 @@ class UsersOut(Schema):
 
 class InstructorOut(Schema):
     id: int
+
+
+class StudentOut(Schema):
+    id: int
+    user: UsersOut
 
 
 """Schema that is used to create a new class in the database."""
@@ -114,15 +119,26 @@ def create_class(request, payload: ClassIn):
 
 """Retrieves a list of all classes."""
 @api.get("/classes", response=List[ClassOut])
-def list_classes(request):
-    qs = Class.objects.all()
-    return qs
+def list_classes(request, username):
+    user = User.objects.filter(student__user__username=username).first()
+    if not user:
+        user = User.objects.get(instructor__user__username=username)
+        return Class.objects.filter(instructor__user=user)
+
+    return Class.objects.filter(classstudents__student=user)
 
 
 """Retrieves a list of all projects."""
 @api.get("/projects", response=List[ProjectOut])
 def list_projects(request):
     qs = Project.objects.all()
+    return qs
+
+
+"""Retrieves a list of all students in a class."""
+@api.get("/students/{class_id}", response=List[StudentOut])
+def list_students(request, class_id: int):
+    qs = Student.objects.filter(user__classstudents__class_id=class_id)
     return qs
 
 
@@ -136,7 +152,7 @@ def validate_user(payload):
     except Exception:
         return f"No user with the username: {payload.username}"
 
-    resp = check_password(payload.password, user.password)
+    resp = check_password(payload.password_hash, user.password_hash)
     if resp:
         return "Successful!"
     else:

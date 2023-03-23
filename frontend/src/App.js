@@ -16,7 +16,7 @@ function App() {
   const [projects, setProjects] = useState([]);
 
   useEffect(() => {
-    axios.get('http://localhost:8000/api/classes')
+    axios.get('http://localhost:8000/api/classes', {params: {username: localStorage.getItem("login_credentials")} })
       .then(res => {
           const classes = res.data;
           setClasses(classes);
