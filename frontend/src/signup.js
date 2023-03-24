@@ -35,13 +35,11 @@ function SignUp() {
     const addUser = (username, password, user_type) => {
         axios.post('http://localhost:8000/api/users', {
             "username": username,
-            "name": username,
-            "user_type": user_type,
-            "school_id_id": 1,
-            "active": true,
+            "type": user_type,
+            "is_active": true,
+            "is_superuser": false,
             "password": password,
             "password_hash": password,
-            "salt": "string",
             "created_on": moment().format(),//moment().format("DD-MM-YYYY hh:mm:ss"),
             "updated_on": moment().format(),
         }).then((response) => {
@@ -96,12 +94,15 @@ function SignUp() {
     return (
         <div className="App">
             <header className="App-header">
+                <Tbar/>
+            </header>
+            <div id="content">
                 <div className="login-form">
-                    <div className="title">Sign Up</div>
+                    <div className="title-grey">Sign Up</div>
                     {/* if the isSubmitted is truthy, a form is rendered that says that they successfully signed up*/}
                     {isSubmitted ? <div>User successfully signed up</div> : renderForm}
                 </div>
-            </header>
+            </div>
         </div>
     )
 }

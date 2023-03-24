@@ -81,11 +81,14 @@ function LogIn() {
     return (
         <div className="App">
             <header className="App-header">
+                <Tbar/>
+            </header>
+            <div id="content">
                 <div className="login-form">
-                    <div className="title">Log In</div>
+                    <div className="title-grey">Log In</div>
                     {isSubmitted ? <div>User is successfully logged in</div> : renderForm}
                 </div>
-            </header>
+            </div>
         </div>
     )
 }

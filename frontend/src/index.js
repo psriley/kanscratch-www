@@ -7,13 +7,13 @@ import SignUp from './signup';
 import LogIn from './login';
 import Profile from './profile';
 import Details from './details';
+import Help from  './help';
 import reportWebVitals from './reportWebVitals';
 import {
   BrowserRouter as Router,
   Routes,
   Route,
 } from "react-router-dom";
-import Tbar from './components/topbar';
 
 
 /**
@@ -21,14 +21,15 @@ import Tbar from './components/topbar';
  */
 ReactDOM.render(
   <Router>
-    <Tbar/>
     <Routes>
       <Route path="/" element={<App/>} />
+      <Route path="/help" element={<Help/>} />
       <Route path="/about" element={<About/>} />
       <Route path="/signup" element={<SignUp/>} />
       <Route path="/login" element={<LogIn/>} />
       <Route path="/profile" element={<Profile/>} />
-      <Route path="/details" element={<Details/>} />
+      <Route path="/project/:id" element={<Details/>} />
+      {/*<Route path="/classroom/:id" element={<Details/>} />*/}
     </Routes>
   </Router>
   , document.getElementById('root')
