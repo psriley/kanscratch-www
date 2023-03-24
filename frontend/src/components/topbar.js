@@ -31,11 +31,19 @@ function Tbar(){
                     </li>
                 </Link>
 
+                {!localStorage.getItem("login_credentials") ?
                 <Link to="/login">
                     <li>
                         <div className="btn navigation">Log in</div>
                     </li>
                 </Link>
+                :
+                <Link to="/logout">
+                    <li>
+                        <div className="btn navigation">Log out</div>
+                    </li>
+                </Link>
+                }
 
                 <Link to="/profile">
                     <li>
@@ -43,7 +51,7 @@ function Tbar(){
                     </li>
                 </Link>
 
-                <a href="https://scratch.mit.edu/" target="_blank">
+                <a href="https://scratch.mit.edu/">
                     <li>
                         <div className="btn navigation">Scratch Website</div>
                     </li>

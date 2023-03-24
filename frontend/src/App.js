@@ -10,17 +10,22 @@ import axios from "axios";
  * @function
  */
 function App() {
-  const [data, setData] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [classes, setClasses] = useState([]);
   const [projects, setProjects] = useState([]);
 
   useEffect(() => {
-    axios.get('http://localhost:8000/api/classes', {params: {username: localStorage.getItem("login_credentials")} })
-      .then(res => {
-          const classes = res.data;
-          setClasses(classes);
-      })
+    const credentials = localStorage.getItem("login_credentials");
+    if (credentials) {
+      axios.get('http://localhost:8000/api/classes', {params: {username: credentials}})
+        .then(res => {
+            const classes = res.data;
+            setClasses(classes);
+        })
+        .catch(error => {
+          console.log(error.response.data.error);
+        })
+    }
   }, []);
 
   useEffect(() => {

@@ -2,7 +2,7 @@ from ninja import NinjaAPI
 from ninja import Schema
 from datetime import datetime
 from typing import List
-from projects.models import User, Class, Project, ClassStudents, Student
+from projects.models import User, Class, Project, Student
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.hashers import check_password
 
@@ -39,10 +39,12 @@ class UsersOut(Schema):
     updated_by_id: int = None
 
 
+"""List of instructor ids"""
 class InstructorOut(Schema):
     id: int
 
 
+"""List of student ids and user objects"""
 class StudentOut(Schema):
     id: int
     user: UsersOut
@@ -72,7 +74,7 @@ class ClassOut(Schema):
     updated_by_id: int = 1
 
 
-"""Schema that is used to retrieve a list of classes in the database"""
+"""Schema that is used to retrieve a list of projects in the database"""
 class ProjectOut(Schema):
     name: str = "Project 1"
     description: str = "project description",
@@ -120,6 +122,9 @@ def create_class(request, payload: ClassIn):
 """Retrieves a list of all classes."""
 @api.get("/classes", response=List[ClassOut])
 def list_classes(request, username):
+    if not username:
+        return
+
     user = User.objects.filter(student__user__username=username).first()
     if not user:
         user = User.objects.get(instructor__user__username=username)
