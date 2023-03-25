@@ -14,7 +14,9 @@ const About = () => {
         <h1 className="title">KanScratch for Students:</h1>
         <h3>Welcome to KanScratch! Here we'll help you get started rocking your projects!</h3>
         <ol style={{margin: "2vh auto auto 4vw"}}>
+          <li>Sign up by clicking the "Sign up" button, or Log in by cliking the "Log in" button in the navigation bar above.</li>
           <li>Navigate to the main student page by pressing the KanScratch logo above in the navigation bar.</li>
+          <ul><li>The button text for "Log in" should now say "Log out". Press this button when you want to log out.</li></ul>
           <li>Click the "Join" button in the header of the <i>Classrooms</i> container to join your classrooms.</li>
           <li>Type in the classroom code (ask your instructor for this code) in the box that pops up.</li>
           <li>Click the "Join" button to join your classroom <strong>[FUTURE FEATURE: THIS IS NOT IMPLEMENTED YET]</strong>.</li>
