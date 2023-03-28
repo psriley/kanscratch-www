@@ -5,6 +5,7 @@ import App from './App';
 import About from './about';
 import SignUp from './signup';
 import LogIn from './login';
+import LogOut from "./logout";
 import Profile from './profile';
 import Details from './details';
 import Help from  './help';
@@ -27,6 +28,7 @@ ReactDOM.render(
       <Route path="/about" element={<About/>} />
       <Route path="/signup" element={<SignUp/>} />
       <Route path="/login" element={<LogIn/>} />
+      <Route path="/logout" element={<LogOut/>} />
       <Route path="/profile" element={<Profile/>} />
       <Route path="/project/:id" element={<Details/>} />
       {/*<Route path="/classroom/:id" element={<Details/>} />*/}

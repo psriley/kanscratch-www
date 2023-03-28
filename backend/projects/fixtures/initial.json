@@ -4,6 +4,7 @@
     "pk": 1,
     "fields": {
       "username": "psriley",
+      "password_hash": "bcrypt_sha256$$2b$12$SKsLQUa2InkStO0VuxDHp.yim6P1siCfrxh6.Rq8fXUz/ooxJbp8a",
       "type": "Instructor"
     }
   },
@@ -15,6 +16,38 @@
     }
   },
   {
+    "model": "projects.user",
+    "pk": 2,
+    "fields": {
+      "username": "student1",
+      "password_hash": "bcrypt_sha256$$2b$12$SKsLQUa2InkStO0VuxDHp.yim6P1siCfrxh6.Rq8fXUz/ooxJbp8a",
+      "type": "Student"
+    }
+  },
+  {
+    "model": "projects.student",
+    "pk": 1,
+    "fields": {
+      "user_id": 2
+    }
+  },
+  {
+    "model": "projects.user",
+    "pk": 3,
+    "fields": {
+      "username": "teacher1",
+      "password_hash": "bcrypt_sha256$$2b$12$SKsLQUa2InkStO0VuxDHp.yim6P1siCfrxh6.Rq8fXUz/ooxJbp8a",
+      "type": "Instructor"
+    }
+  },
+  {
+    "model": "projects.instructor",
+    "pk": 2,
+    "fields": {
+      "user_id": 3
+    }
+  },
+  {
     "model": "projects.class",
     "pk": 1,
     "fields": {
@@ -23,6 +56,25 @@
       "instructor_id": 1,
       "class_code_hash": "hash",
       "updated_by_id": 1
+    }
+  },
+  {
+    "model": "projects.class",
+    "pk": 2,
+    "fields": {
+      "name": "Class2",
+      "created_by_id": 3,
+      "instructor_id": 2,
+      "class_code_hash": "hsah",
+      "updated_by_id": 3
+    }
+  },
+  {
+    "model": "projects.classstudents",
+    "pk": 1,
+    "fields": {
+      "class": 1,
+      "student": 2
     }
   },
   {
