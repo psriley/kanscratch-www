@@ -2,7 +2,7 @@ from ninja import NinjaAPI
 from ninja import Schema
 from datetime import datetime
 from typing import List
-from projects.models import User, Class, Project, Student
+from projects.models import User, Classroom, Project, Student, ClassStudents
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.hashers import check_password
 
@@ -51,7 +51,7 @@ class StudentOut(Schema):
 
 
 """Schema that is used to create a new class in the database."""
-class ClassIn(Schema):
+class ClassroomIn(Schema):
     name: str = "Class 1"
     class_code_hash: str = None
     instructor: InstructorOut
@@ -63,7 +63,7 @@ class ClassIn(Schema):
 
 
 """Schema that is used to retrieve a list of classes in the database"""
-class ClassOut(Schema):
+class ClassroomOut(Schema):
     name: str = "Class 1"
     class_code_hash: str = None
     instructor: InstructorOut
@@ -81,6 +81,12 @@ class ProjectOut(Schema):
     class_id: int = 1,
     created_by_id: int = 1,
     updated_by_id: int = 1
+
+
+class ClassStudentsOut(Schema):
+    classroom_name: str
+    student: str
+
 
 # endregion
 
@@ -114,23 +120,28 @@ def user_login(request, payload: Login):
 
 """Creates a class object."""
 @api.post("/class")
-def create_class(request, payload: ClassIn):
-    c = Class.objects.create_class(**payload.dict())
+def create_class(request, payload: ClassroomIn):
+    c = Classroom.objects.create_class(**payload.dict())
     return {"id": c.id}
 
 
-"""Retrieves a list of all classes."""
-@api.get("/classes", response=List[ClassOut])
-def list_classes(request, username):
+"""Retrieves a list of all classes for a specific user."""
+@api.get("/user_classes", response=List[ClassroomOut])
+def list_user_classes(request, username):
     if not username:
         return
 
     user = User.objects.filter(student__user__username=username).first()
     if not user:
         user = User.objects.get(instructor__user__username=username)
-        return Class.objects.filter(instructor__user=user)
+        return Classroom.objects.filter(instructor__user=user)
 
-    return Class.objects.filter(classstudents__student=user)
+    return Classroom.objects.filter(classstudents__student=user)
+
+
+@api.get("/classes", response=List[ClassroomOut])
+def list_classes(request):
+    return Classroom.objects.all()
 
 
 """Retrieves a list of all projects."""
@@ -145,6 +156,18 @@ def list_projects(request):
 def list_students(request, class_id: int):
     qs = Student.objects.filter(user__classstudents__class_id=class_id)
     return qs
+
+
+"""Creates a ClassStudents object."""
+@api.post("/join")
+def join_class(request, payload: ClassStudentsOut):
+    classroom_id = Classroom.objects.filter(name=payload.classroom_name).first().id
+    user = User.objects.filter(username=payload.student).first()
+    cs = ClassStudents.objects.create(classroom_id=classroom_id, student=user)
+    print(classroom_id)
+    print(user)
+    print(cs)
+    return {"id": cs.id}
 
 
 """
