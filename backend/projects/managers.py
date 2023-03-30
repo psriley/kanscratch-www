@@ -23,7 +23,7 @@ class UManager(UserManager):
 
 
 
-class ClassManager(QuerySet):
+class ClassroomManager(QuerySet):
     def create_class(self, active, instructor, name="Class 1", **extra_fields):
         c = self.model(instructor=instructor.pk, name=name, active=active, **extra_fields)
         c.save(using=self._db)

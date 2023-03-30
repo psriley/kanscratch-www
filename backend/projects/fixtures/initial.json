@@ -1,5 +1,32 @@
 [
   {
+    "model": "projects.color",
+    "pk": 1,
+    "fields": {
+      "name": "red",
+      "slug": "red",
+      "hex_code": "#FF0000"
+    }
+  },
+  {
+    "model": "projects.color",
+    "pk": 2,
+    "fields": {
+      "name": "blue",
+      "slug": "blue",
+      "hex_code": "#0000FF"
+    }
+  },
+  {
+    "model": "projects.color",
+    "pk": 3,
+    "fields": {
+      "name": "green",
+      "slug": "green",
+      "hex_code": "#00FF00"
+    }
+  },
+  {
     "model": "projects.user",
     "pk": 1,
     "fields": {
@@ -48,10 +75,12 @@
     }
   },
   {
-    "model": "projects.class",
+    "model": "projects.classroom",
     "pk": 1,
     "fields": {
       "name": "Class1",
+      "slug": "classroom_1",
+      "color": 1,
       "created_by_id": 1,
       "instructor_id": 1,
       "class_code_hash": "hash",
@@ -59,10 +88,12 @@
     }
   },
   {
-    "model": "projects.class",
+    "model": "projects.classroom",
     "pk": 2,
     "fields": {
       "name": "Class2",
+      "color": 2,
+      "slug": "classroom_2",
       "created_by_id": 3,
       "instructor_id": 2,
       "class_code_hash": "hsah",
@@ -73,7 +104,7 @@
     "model": "projects.classstudents",
     "pk": 1,
     "fields": {
-      "class": 1,
+      "classroom": 1,
       "student": 2
     }
   },
@@ -83,7 +114,7 @@
     "fields": {
       "name": "Project1",
       "description": "blah",
-      "class_id": 1,
+      "classroom_id": 1,
       "created_by_id": 1,
       "updated_by_id": 1
     }

@@ -12,12 +12,14 @@ import axios from "axios";
 function App() {
   const [showModal, setShowModal] = useState(false);
   const [classes, setClasses] = useState([]);
+  const [allClasses, setAllClasses] = useState([]);
   const [projects, setProjects] = useState([]);
+  const [credentials, setCredentials] = useState(null);
 
   useEffect(() => {
-    const credentials = localStorage.getItem("login_credentials");
+    setCredentials(localStorage.getItem("login_credentials"));
     if (credentials) {
-      axios.get('http://localhost:8000/api/classes', {params: {username: credentials}})
+      axios.get('http://localhost:8000/api/user_classes', {params: {username: credentials}})
         .then(res => {
             const classes = res.data;
             setClasses(classes);
@@ -26,7 +28,7 @@ function App() {
           console.log(error.response.data.error);
         })
     }
-  }, []);
+  }, [credentials]);
 
   useEffect(() => {
     axios.get('http://localhost:8000/api/projects')
@@ -44,6 +46,40 @@ function App() {
     setShowModal(false);
   };
 
+  const handleJoinButtonClick = async () => {
+    const fetchedClasses = await getAllClasses();
+    joinClass(fetchedClasses);
+  };
+
+  async function getAllClasses() {
+    return axios.get('http://localhost:8000/api/classes')
+      .then(res => {
+        return res.data;
+      });
+  }
+
+  const joinClass = (fetchedClasses) => {
+    const code = document.getElementById("code").value;
+    const hashes = fetchedClasses.map((value) => {
+      return { name: value.name, code: value.class_code_hash };
+    });
+
+    hashes.forEach((value) => {
+      if (value.code === code) {
+        console.log("Match!");
+        axios.post('http://localhost:8000/api/join', {
+          "classroom_name": value.name, // remember to change this key from "classroom_name" to "class_name"
+          "student": credentials,
+        }).then((response) => {
+          console.log(`Successfully joined class: ${value.name}!`);
+          window.location.reload();
+        });
+      } else {
+        console.log("Nope...");
+      }
+    });
+  };
+
   return (
     <div className='App'>
       <header className='App-header'>
@@ -53,10 +89,10 @@ function App() {
         <Modal show={showModal} handleClose={handleCloseModal}>
           <div className='codeBox'>
             <div id='codeDiv'>
-              <input className='classCode' type='text'/>
+              <input id="code" className='classCode' type='text'/>
             </div>
             <div className='buttonDiv'>
-              <button className='codeButton'>Join</button>
+              <button className='codeButton' onClick={handleJoinButtonClick}>Join</button>
             </div>
           </div>
         </Modal>
