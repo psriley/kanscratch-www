@@ -118,5 +118,15 @@
       "created_by_id": 1,
       "updated_by_id": 1
     }
+  },
+  {
+    "model": "projects.projectsubmission",
+    "pk": 1,
+    "fields": {
+      "classroom_id": 1,
+      "created_by_id": 1,
+      "project_id": 1,
+      "student_id": 1
+    }
   }
 ]

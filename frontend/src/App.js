@@ -30,14 +30,19 @@ function App() {
     }
   }, [credentials]);
 
-  //TODO: Change for per user
   useEffect(() => {
-    axios.get('http://localhost:8000/api/projects')
-      .then(res => {
-          const projects = res.data;
-          setProjects(projects);
-      })
-  }, []);
+    setCredentials(localStorage.getItem("login_credentials"));
+    if (credentials) {
+      axios.get(`http://localhost:8000/api/projects/${credentials}`)
+          .then(res => {
+            const projects = res.data;
+            setProjects(projects);
+          })
+          .catch(error => {
+            console.log(error.response.data.error);
+          })
+    }
+  }, [credentials]);
 
   const handleShowModal = () => {
     setShowModal(true);
@@ -110,7 +115,7 @@ function App() {
             <span>Projects</span>
           </div>
           <div className='ProjectList'>
-            <ItemBox text={'project'} list={projects} />
+            <ItemBox text={'project'} list={projects.map((project) => {return {name: project.project.name}})} />
           </div>
         </div>
       </div>
