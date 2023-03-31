@@ -65,9 +65,14 @@ class ClassroomIn(Schema):
     updated_by_id: int = 1
 
 
+class ColorOut(Schema):
+    hex_code: str
+
+
 """Schema that is used to retrieve a list of classes in the database"""
 class ClassroomOut(Schema):
     name: str = "Class 1"
+    color: ColorOut
     class_code_hash: str = None
     instructor: InstructorOut
     active: bool = True
@@ -80,6 +85,7 @@ class ClassroomOut(Schema):
 """Schema that is used to retrieve a list of projects in the database"""
 class ProjectOut(Schema):
     name: str = "Project 1"
+    slug: str = "default-slug"
     description: str = "project description",
     classroom_id: int = 1,
     created_by_id: int = 1,
@@ -137,9 +143,6 @@ def user_login(request, payload: Login):
     return response
 
 
-# def list_instructors(request)
-
-
 """Creates a class object."""
 @api.post("/class")
 def create_class(request, payload: ClassroomIn):
@@ -161,6 +164,8 @@ def list_user_classes(request, username):
     return Classroom.objects.filter(classstudents__student=user)
 
 
+# TODO: Change this to an api call that passes in a class code and checks classrooms here in the backend.
+"""Retrieves a list of all classes in the database."""
 @api.get("/classes", response=List[ClassroomOut])
 def list_classes(request):
     return Classroom.objects.all()
@@ -179,7 +184,7 @@ def list_students(request, class_id: int):
     qs = Student.objects.filter(user__classstudents__class_id=class_id)
     return qs
 
-# TODO: Does this need to also work for an instructor?
+
 """Retrieves a list of projects for a particular student""" 
 @api.get("/student_projects/{username}", response=List[ProjectOut])
 def list_student_projects(request, username: str):
@@ -201,35 +206,23 @@ def list_instructor_projects(request, username: str):
         return
     return Project.objects.filter(classroom__instructor__user=user)
 
-'''
-# TODO: How can we query for a particular project?
-"""Retrieves project details for a particular project""" 
-@api.get("/projects/details/{project_submission_id}", response=ProjectSubmissionOut)
-def get_project_details(request, project_submission_id: int):
-    if not project_submission_id:
-        return
-    project_submission = ProjectSubmission.objects.filter(id=project_submission_id)
-    return project_submission
-    '''
 
 """Retrieves details for a specific project"""
-@api.get("/projects/{project_id}/{username}/{classroom_id}", response=ProjectSubmissionOut)
-def get_project_details(request, project_id: int, username: str, classroom_id: int):
-    if project_id and username and classroom_id:
+@api.get("/projects/{project_slug}", response=ProjectSubmissionOut)
+def get_project_details(request, project_slug: str, username: str):
+    if project_slug and username:
         if not username:
             return
         user = User.objects.filter(username=username).first()
         print(user)
         if not user:
             return
-        project_submission = ProjectSubmission.objects.get(project_id=project_id, 
-                                                                 student__student = user,
-                                                                 classroom_id=classroom_id)
-        print(project_submission)
-        #return project_submission
+        project_submission = ProjectSubmission.objects.get(project__slug=project_slug,
+                                                                 student__student=user)
         return {"classroom": project_submission.classroom, "project": project_submission.project}
     else:
         return
+
 
 """Creates a ClassStudents object."""
 @api.post("/join")
@@ -255,12 +248,3 @@ def validate_user(payload):
         return {"message": "Successful!", "user": model_to_dict(user)}
     else:
         return "Wrong password!"
-
-
-# @api.put("/users/{user_id}")
-# def update_user(request, user_id: int):
-#     user = get_object_or_404(User, id=user_id)
-#     for attr, value in payload.dict().items():
-#         setattr(user, attr, value)
-#     user.save()
-#     return {"success": True}

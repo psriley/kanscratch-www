@@ -14,8 +14,8 @@ html {
 }
 
 img {
-  width: 80%;
-  height: 80%;
+  min-width: 20vw;
+  min-height: 20vh;
 }
 
 label {
@@ -333,7 +333,37 @@ footer p {
 
 .Container {
   display: grid;
-  grid-template-columns: 1fr max-content;
+  grid-template-columns: 1fr 1fr;
+  gap: 5vw;
+}
+
+#description {
+  font-size: 1.5rem;
+  max-width: 20vw;
+  word-wrap: normal;
+  align-self: center;
+}
+
+#see-inside-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#see-inside-button a button {
+  margin-top: 2vh;
+  width: 10vw;
+  height: 5vh;
+  border: 2px solid #F1AD02;
+  background-color: white;
+  border-radius: 25px;
+  font-size: 1rem;
+}
+
+#see-inside-button a button:hover {
+  background-color: #F1AD02;
+  color: white;
+  cursor: pointer;
 }
 
 /* .ItemButton {

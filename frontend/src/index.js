@@ -30,7 +30,7 @@ ReactDOM.render(
       <Route path="/login" element={<LogIn/>} />
       <Route path="/logout" element={<LogOut/>} />
       <Route path="/profile" element={<Profile/>} />
-      <Route path="/project/:id" element={<Details/>} />
+      <Route path="/project/:slug" element={<Details/>} />
       {/*<Route path="/classroom/:id" element={<Details/>} />*/}
     </Routes>
   </Router>

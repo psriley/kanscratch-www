@@ -53,6 +53,7 @@ function App() {
           response = await axios.get(`http://localhost:8000/api/instructor_projects/${credentials.username}`, { cancelToken: source.token });
         }
         const projects = response.data;
+        debugger;
         setProjects(projects);
       } catch (error) {
         console.log(error.response.data.error);
@@ -138,7 +139,7 @@ function App() {
             <span>Projects</span>
           </div>
           <div className='ProjectList'>
-            <ItemBox text={'project'} list={projects.map((project) => {return {name: project.name}})} />
+            <ItemBox text={'project'} list={projects.map((project) => {return {name: project.name}})} slug={projects.map((project) => {return {slug: project.slug}})} />
           </div>
         </div>
       </div>

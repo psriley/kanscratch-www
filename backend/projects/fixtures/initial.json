@@ -113,7 +113,8 @@
     "pk": 1,
     "fields": {
       "name": "Project1",
-      "description": "blah",
+      "slug": "project1_alskf",
+      "description": "● Fall Pumpkin Decorator ● ~~~~~~~~~~~~~~~~~~~~\nThe season Fall starts on September 22nd 2022 this year. In honor of my favorite season, here is a decorator!\n● Controls ●\n~~~~~~~~~~\nClick the black icons to change the menu that appears on the far left so you can customize your pumpkin. Click on the background to change it's costume If you see an ad in the comments, report the comment please.\n● Credits ●\n~~~~~~~~\nArt - 100% by me Code - 100% by me The Song is called Moo Moo Meadows from Mario Cart 8, but I got it from @jean-pierre-scratch\n● Notes ●\n~~~~~~~~\n9/29/2022 - This feels so unreal TYSM to Scratch Team for featuring this! Sorry if I can't reply to all the messages but thank you guys for all the nice comments :)",
       "classroom_id": 1,
       "created_by_id": 1,
       "updated_by_id": 1
