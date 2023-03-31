@@ -17,31 +17,54 @@ function App() {
   const [credentials, setCredentials] = useState(null);
 
   useEffect(() => {
-    setCredentials(localStorage.getItem("login_credentials"));
+    const storedCredentials = JSON.parse(localStorage.getItem("login_credentials"));
     if (credentials) {
-      axios.get('http://localhost:8000/api/user_classes', {params: {username: credentials}})
-        .then(res => {
-            const classes = res.data;
-            setClasses(classes);
-        })
-        .catch(error => {
-          console.log(error.response.data.error);
-        })
+      if (storedCredentials && storedCredentials.username !== credentials.username) {
+        setCredentials(storedCredentials);
+      }
+    } else {
+      setCredentials(storedCredentials);
     }
   }, [credentials]);
 
   useEffect(() => {
-    setCredentials(localStorage.getItem("login_credentials"));
-    if (credentials) {
-      axios.get(`http://localhost:8000/api/projects/${credentials}`)
-          .then(res => {
-            const projects = res.data;
-            setProjects(projects);
-          })
-          .catch(error => {
-            console.log(error.response.data.error);
-          })
+    if (!credentials) {
+      return;
     }
+
+    let source = axios.CancelToken.source();
+
+    const fetchClasses = async () => {
+      try {
+        let response = await axios.get('http://localhost:8000/api/user_classes', { params: {username: credentials.username}, cancelToken: source.token });
+        const classes = response.data;
+        setClasses(classes);
+      } catch (error) {
+        console.log(error.response.data.error);
+      }
+    };
+
+    const fetchProjects = async () => {
+      try {
+        let response;
+        if (credentials.type === 'Student') {
+          response = await axios.get(`http://localhost:8000/api/student_projects/${credentials.username}`, { cancelToken: source.token });
+        } else {
+          response = await axios.get(`http://localhost:8000/api/instructor_projects/${credentials.username}`, { cancelToken: source.token });
+        }
+        const projects = response.data;
+        setProjects(projects);
+      } catch (error) {
+        console.log(error.response.data.error);
+      }
+    };
+
+    fetchClasses();
+    fetchProjects();
+
+    return () => {
+      source.cancel();
+    };
   }, [credentials]);
 
   const handleShowModal = () => {
@@ -115,7 +138,7 @@ function App() {
             <span>Projects</span>
           </div>
           <div className='ProjectList'>
-            <ItemBox text={'project'} list={projects.map((project) => {return {name: project.project.name}})} />
+            <ItemBox text={'project'} list={projects.map((project) => {return {name: project.name}})} />
           </div>
         </div>
       </div>

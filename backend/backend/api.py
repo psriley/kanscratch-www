@@ -1,3 +1,6 @@
+import json
+
+from django.forms import model_to_dict
 from ninja import NinjaAPI
 from ninja import Schema
 from datetime import datetime
@@ -178,14 +181,25 @@ def list_students(request, class_id: int):
 
 # TODO: Does this need to also work for an instructor?
 """Retrieves a list of projects for a particular student""" 
-@api.get("/projects/{username}", response=List[ProjectSubmissionOut])
-def list_user_projects(request, username: str):
+@api.get("/student_projects/{username}", response=List[ProjectOut])
+def list_student_projects(request, username: str):
     if not username:
         return
     user = User.objects.filter(username=username).first()
     if not user:
         return
-    return ProjectSubmission.objects.filter(student__student=user)
+    return Project.objects.filter(projectsubmission__student__student=user)
+
+
+"""Retrieves a list of projects for a particular instructor"""
+@api.get("/instructor_projects/{username}", response=List[ProjectOut])
+def list_instructor_projects(request, username: str):
+    if not username:
+        return
+    user = User.objects.filter(username=username).first()
+    if not user:
+        return
+    return Project.objects.filter(classroom__instructor__user=user)
 
 '''
 # TODO: How can we query for a particular project?
@@ -238,7 +252,7 @@ def validate_user(payload):
 
     resp = check_password(payload.password_hash, user.password_hash)
     if resp:
-        return "Successful!"
+        return {"message": "Successful!", "user": model_to_dict(user)}
     else:
         return "Wrong password!"
 

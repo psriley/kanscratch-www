@@ -31,7 +31,7 @@ function Tbar(){
                     </li>
                 </Link>
 
-                {!localStorage.getItem("login_credentials") ?
+                {!JSON.parse(localStorage.getItem("login_credentials")) ?
                 <Link to="/login">
                     <li>
                         <div className="btn navigation">Log in</div>
