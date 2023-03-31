@@ -30,6 +30,7 @@ function App() {
     }
   }, [credentials]);
 
+  //TODO: Change for per user
   useEffect(() => {
     axios.get('http://localhost:8000/api/projects')
       .then(res => {

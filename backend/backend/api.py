@@ -2,7 +2,7 @@ from ninja import NinjaAPI
 from ninja import Schema
 from datetime import datetime
 from typing import List
-from projects.models import User, Classroom, Project, Student, ClassStudents
+from projects.models import User, Classroom, Project, Student, ClassStudents, ProjectSubmission
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.hashers import check_password
 
@@ -20,7 +20,7 @@ class UserIn(Schema):
     type: str = 'Instructor'
     is_superuser: bool = False
     is_active: bool = True
-    password: str = None
+    password_hash: str = None
     created_on: datetime = None
     updated_on: datetime = None
     updated_by_id: int = None
@@ -78,14 +78,33 @@ class ClassroomOut(Schema):
 class ProjectOut(Schema):
     name: str = "Project 1"
     description: str = "project description",
-    class_id: int = 1,
+    classroom_id: int = 1,
     created_by_id: int = 1,
     updated_by_id: int = 1
 
 
+"""Schema that represents the ClassStudents relationship entity"""
 class ClassStudentsOut(Schema):
     classroom_name: str
-    student: str
+    student: StudentOut
+
+
+"""Schema that is used to retrieve details for a specific project"""
+# TODO: Due date and Available date implementation
+class DetailedProjectOut(Schema):
+    name: str = "Project 1",
+    description: str = "project description",
+    classroom_id: int = 1,
+    #due_date: datetime = None,
+    #available_date: datetime = None,
+    created_by_id: int = 1,
+    updated_by_id: int = 1
+
+
+"""Schema that is used to retrieve a project submission for a particular student"""
+class ProjectSubmissionOut(Schema):
+    classroom: ClassroomOut
+    project: DetailedProjectOut
 
 
 # endregion
@@ -157,6 +176,46 @@ def list_students(request, class_id: int):
     qs = Student.objects.filter(user__classstudents__class_id=class_id)
     return qs
 
+# TODO: Does this need to also work for an instructor?
+"""Retrieves a list of projects for a particular student""" 
+@api.get("/projects/{username}", response=List[ProjectSubmissionOut])
+def list_user_projects(request, username: str):
+    if not username:
+        return
+    user = User.objects.filter(username=username).first()
+    if not user:
+        return
+    return ProjectSubmission.objects.filter(student__student=user)
+
+'''
+# TODO: How can we query for a particular project?
+"""Retrieves project details for a particular project""" 
+@api.get("/projects/details/{project_submission_id}", response=ProjectSubmissionOut)
+def get_project_details(request, project_submission_id: int):
+    if not project_submission_id:
+        return
+    project_submission = ProjectSubmission.objects.filter(id=project_submission_id)
+    return project_submission
+    '''
+
+"""Retrieves details for a specific project"""
+@api.get("/projects/{project_id}/{username}/{classroom_id}", response=ProjectSubmissionOut)
+def get_project_details(request, project_id: int, username: str, classroom_id: int):
+    if project_id and username and classroom_id:
+        if not username:
+            return
+        user = User.objects.filter(username=username).first()
+        print(user)
+        if not user:
+            return
+        project_submission = ProjectSubmission.objects.get(project_id=project_id, 
+                                                                 student__student = user,
+                                                                 classroom_id=classroom_id)
+        print(project_submission)
+        #return project_submission
+        return {"classroom": project_submission.classroom, "project": project_submission.project}
+    else:
+        return
 
 """Creates a ClassStudents object."""
 @api.post("/join")
@@ -164,9 +223,6 @@ def join_class(request, payload: ClassStudentsOut):
     classroom_id = Classroom.objects.filter(name=payload.classroom_name).first().id
     user = User.objects.filter(username=payload.student).first()
     cs = ClassStudents.objects.create(classroom_id=classroom_id, student=user)
-    print(classroom_id)
-    print(user)
-    print(cs)
     return {"id": cs.id}
 
 

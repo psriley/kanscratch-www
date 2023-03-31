@@ -2,7 +2,7 @@ from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import AbstractUser
 
-from projects.managers import ClassroomManager, UManager
+from projects.managers import ProjectSubmissionManager, ClassroomManager, UManager
 
 """
 Describes the User object that is used to identify a user.
@@ -99,6 +99,8 @@ class ProjectSubmission(models.Model):
     student = models.ForeignKey(ClassStudents, on_delete=models.SET_NULL, null=True)
     created_on = models.DateTimeField(default=timezone.now)
     created_by = models.ForeignKey(User, related_name='submission_created_user', on_delete=models.CASCADE)
+    
+    objects = ProjectSubmissionManager()
 
     class Meta:
         unique_together = ('project', 'student', 'classroom')

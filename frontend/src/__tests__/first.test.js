@@ -3,9 +3,11 @@ import React from 'react';
 import LogIn, { onPost } from '../login';
 import mockAxios from '../__mocks__/axios';
 
+
 afterEach(() => {
     mockAxios.reset();
 })
+
 
 describe("login form on submit", () => {
     test("login form's inputs should accept text", () => {
@@ -31,3 +33,4 @@ describe("login form on submit", () => {
         fireEvent.submit(buttonNode);
     });
 });
+

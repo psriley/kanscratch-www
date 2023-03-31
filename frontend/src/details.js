@@ -14,6 +14,8 @@ const WrappedGui = AppStateHOC(Gui);
  * @function
  */
 function Details() {
+    // TODO: useEffect details per project
+
     return (
         <div className="App">
             <header className="App-header">
@@ -30,4 +32,5 @@ function Details() {
   );
 }
   
+
 export default Details;
