@@ -7,7 +7,7 @@ import SignUp from './signup';
 import LogIn from './login';
 import LogOut from "./logout";
 import Profile from './profile';
-import Details from './details';
+import ProjectDetails from './projectDetails';
 import Help from  './help';
 import reportWebVitals from './reportWebVitals';
 import {
@@ -15,6 +15,7 @@ import {
   Routes,
   Route,
 } from "react-router-dom";
+import ClassroomDetails from "./classroom_details";
 
 
 /**
@@ -30,8 +31,8 @@ ReactDOM.render(
       <Route path="/login" element={<LogIn/>} />
       <Route path="/logout" element={<LogOut/>} />
       <Route path="/profile" element={<Profile/>} />
-      <Route path="/project/:slug" element={<Details/>} />
-      {/*<Route path="/classroom/:id" element={<Details/>} />*/}
+      <Route path="/project/:slug" element={<ProjectDetails/>} />
+      <Route path="/classroom/:slug" element={<ClassroomDetails/>} />
     </Routes>
   </Router>
   , document.getElementById('root')

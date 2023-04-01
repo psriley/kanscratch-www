@@ -75,6 +75,22 @@
     }
   },
   {
+    "model": "projects.user",
+    "pk": 4,
+    "fields": {
+      "username": "student2",
+      "password_hash": "bcrypt_sha256$$2b$12$SKsLQUa2InkStO0VuxDHp.yim6P1siCfrxh6.Rq8fXUz/ooxJbp8a",
+      "type": "Student"
+    }
+  },
+  {
+    "model": "projects.student",
+    "pk": 2,
+    "fields": {
+      "user_id": 4
+    }
+  },
+  {
     "model": "projects.classroom",
     "pk": 1,
     "fields": {
@@ -83,7 +99,7 @@
       "color": 1,
       "created_by_id": 1,
       "instructor_id": 1,
-      "class_code_hash": "hash",
+      "class_code_hash": "hAFtZQp",
       "updated_by_id": 1
     }
   },
@@ -96,7 +112,7 @@
       "slug": "classroom_2",
       "created_by_id": 3,
       "instructor_id": 2,
-      "class_code_hash": "hsah",
+      "class_code_hash": "gPa0Ati",
       "updated_by_id": 3
     }
   },
@@ -106,6 +122,14 @@
     "fields": {
       "classroom": 1,
       "student": 2
+    }
+  },
+  {
+    "model": "projects.classstudents",
+    "pk": 2,
+    "fields": {
+      "classroom": 1,
+      "student": 4
     }
   },
   {

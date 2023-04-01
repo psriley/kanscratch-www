@@ -53,7 +53,6 @@ function App() {
           response = await axios.get(`http://localhost:8000/api/instructor_projects/${credentials.username}`, { cancelToken: source.token });
         }
         const projects = response.data;
-        debugger;
         setProjects(projects);
       } catch (error) {
         console.log(error.response.data.error);
@@ -105,7 +104,7 @@ function App() {
           window.location.reload();
         });
       } else {
-        console.log("Nope...");
+        console.log(`Failed to join class: ${value.name}`);
       }
     });
   };
@@ -131,7 +130,7 @@ function App() {
             <span>Classrooms</span>
             <button name='join' onClick={handleShowModal}>Join</button>
           </div>
-          <ItemBox text={'classroom'} list={classes} />
+          <ItemBox text={'classroom'} list={classes.map((classroom) => {return {name: classroom.name}})} color={classes.map((classroom) => {return classroom.color.hex_code})} slug={classes.map((classroom) => {return {slug: classroom.slug}})} />
         </div>
 
         <div>

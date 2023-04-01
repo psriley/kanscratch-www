@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import { Link } from "react-router-dom";
 
 /**
@@ -6,6 +6,15 @@ import { Link } from "react-router-dom";
  * @function
  */
 function Tbar(){
+    const [credentials, setCredentials] = useState(null);
+    const [username, setUsername] = useState("anonymous");
+
+    useEffect(() => {
+        if (JSON.parse(localStorage.getItem("login_credentials"))) {
+            setUsername(JSON.parse(localStorage.getItem("login_credentials")).username)
+        }
+    }, [credentials]);
+
     return(
         <div className="Topbar">
             <Link to="/">
@@ -15,7 +24,7 @@ function Tbar(){
             <ul>
                 <Link to="/help">
                     <li>
-                        <div className="">Help?</div>
+                        <div className="">Help</div>
                     </li>
                 </Link>
 
@@ -45,17 +54,15 @@ function Tbar(){
                 </Link>
                 }
 
-                <Link to="/profile">
-                    <li>
-                        <div className="btn navigation">Profile</div>
-                    </li>
-                </Link>
-
                 <a href="https://scratch.mit.edu/">
                     <li>
                         <div className="btn navigation">Scratch Website</div>
                     </li>
                 </a>
+
+                <div id="profile">
+                    Hello, {username}
+                </div>
             </ul>
         </div>
     );

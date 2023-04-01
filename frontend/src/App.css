@@ -108,6 +108,39 @@ a {
   text-decoration: none;
 }
 
+.Topbar #profile {
+  background-color: white;
+  border: 2px solid #333;
+  border-radius: 10px;
+  margin-left: 10rem;
+  color: #333333;
+}
+
+/*.Topbar #profile:hover {*/
+/*  background-color: #6c6c6c;*/
+/*}*/
+
+#profile {
+  position: relative;
+  align-self: center;
+  padding: 0.5rem 1rem;
+}
+
+/*#profile:hover #tooltip {*/
+/*  visibility: visible;*/
+/*}*/
+
+/*#profile #tooltip {*/
+/*  visibility: visible;*/
+/*  z-index: 1;*/
+/*  position: absolute;*/
+/*  top: 4rem;*/
+/*  background-position: center;*/
+/*  background-color: white;*/
+/*  width: 100px;*/
+/*  height: 100px;*/
+/*}*/
+
 /* Add styles to the main content */
 main {
   margin: 2rem auto;
@@ -333,8 +366,41 @@ footer p {
 
 .Container {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-areas:
+          "code code"
+          "users projects";
   gap: 5vw;
+}
+
+#class-code-button {
+  grid-area: code;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#class-code-button button {
+  margin-top: 2vh;
+  width: 10vw;
+  height: 5vh;
+  border: 2px solid #F1AD02;
+  background-color: white;
+  border-radius: 25px;
+  font-size: 1rem;
+}
+
+#class-code-button button:hover {
+  background-color: #F1AD02;
+  color: white;
+  cursor: pointer;
+}
+
+#users {
+  grid-area: users;
+}
+
+#projects {
+  grid-area: projects;
 }
 
 #description {
@@ -364,6 +430,26 @@ footer p {
   background-color: #F1AD02;
   color: white;
   cursor: pointer;
+}
+
+.tooltip {
+  position: relative;
+  top: 5vh;
+  background-color: white;
+  color: #333333;
+
+}
+
+#class-code {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 10px solid #6c6c6c;
+  border-radius: 25px;
+  background-color: lightgrey;
+  font-size: 10rem;
+  min-width: 50vw;
+  min-height: 25vh;
 }
 
 /* .ItemButton {

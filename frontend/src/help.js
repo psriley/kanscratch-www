@@ -1,5 +1,4 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import Tbar from "./components/topbar.js"
 
 /**
@@ -17,10 +16,10 @@ const About = () => {
           <li>Navigate to the main student page by pressing the KanScratch logo above in the navigation bar.</li>
           <li>Click the "Join" button in the header of the <i>Classrooms</i> container to join your classrooms.</li>
           <li>Type in the classroom code (ask your instructor for this code) in the box that pops up.</li>
-          <li>Click the "Join" button to join your classroom <strong>[FUTURE FEATURE: THIS IS NOT IMPLEMENTED YET]</strong>.</li>
+          <li>Click the "Join" button to join your classroom.</li>
           <li>Press the "Close" button to navigate back to the main page.</li>
-          <ul><li>You should now be able to see your classroom that you added show in the "Classrooms" container! <strong>[FUTURE FEATURE: THIS IS NOT IMPLEMENTED YET]</strong></li></ul>
-          <li>Click on the classroom to see its details <strong>[FUTURE FEATURE: THIS IS NOT IMPLEMENTED YET]</strong>.</li>
+          <ul><li>You should now be able to see your classroom that you added show in the "Classrooms" container!</li></ul>
+          <li>Click on the classroom to see its details.</li>
           <li>Over in the "Projects" container you can see projects you can complete to learn Scratch and earn badges! <strong>[FUTURE FEATURE: THIS IS NOT IMPLEMENTED YET]</strong></li>
           <li>Click on a project (they match the color of the corresponding classroom in the classroom container) to see its tasks and complete it! <strong>[FUTURE FEATURE: THIS IS NOT IMPLEMENTED YET]</strong></li>
           <li><b>Have fun!</b></li>

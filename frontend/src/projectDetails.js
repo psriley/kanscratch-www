@@ -12,10 +12,10 @@ import {Link, useLocation} from "react-router-dom";
 // const WrappedGui = AppStateHOC(Gui);
 
 /**
- * Contains information describing the details of a specific project on a page called "Details".
+ * Contains information describing the details of a specific project on a page called "Project Details".
  * @function
  */
-function Details() {
+function ProjectDetails() {
     // TODO: useEffect details per project
     const [details, setDetails] = useState(null);
     const [credentials, setCredentials] = useState(null);
@@ -35,7 +35,6 @@ function Details() {
     }, [credentials]);
 
     useEffect(() => {
-        debugger;
         if (!credentials) {
           return;
         }
@@ -44,7 +43,6 @@ function Details() {
           try {
             let response = await axios.get(`http://localhost:8000/api/projects/${slug[0].slug}`, { params: {username: credentials.username} });
             const details = response.data;
-            debugger;
             setDetails(details.project.description);
           } catch (error) {
             console.log(error.response.data.error);
@@ -83,4 +81,4 @@ function Details() {
 }
   
 
-export default Details;
+export default ProjectDetails;

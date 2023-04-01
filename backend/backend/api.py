@@ -1,5 +1,3 @@
-import json
-
 from django.forms import model_to_dict
 from ninja import NinjaAPI
 from ninja import Schema
@@ -72,6 +70,7 @@ class ColorOut(Schema):
 """Schema that is used to retrieve a list of classes in the database"""
 class ClassroomOut(Schema):
     name: str = "Class 1"
+    slug: str
     color: ColorOut
     class_code_hash: str = None
     instructor: InstructorOut
@@ -92,6 +91,12 @@ class ProjectOut(Schema):
     updated_by_id: int = 1
 
 
+"""Schema that only retrieves only basic user information"""
+class BriefUsersOut(Schema):
+    username: str
+    type: str
+
+
 """Schema that represents the ClassStudents relationship entity"""
 class ClassStudentsOut(Schema):
     classroom_name: str
@@ -108,6 +113,12 @@ class DetailedProjectOut(Schema):
     #available_date: datetime = None,
     created_by_id: int = 1,
     updated_by_id: int = 1
+
+
+class DetailedClassroomOut(Schema):
+    classroom: ClassroomOut
+    users: List[BriefUsersOut]
+    projects_list: List[ProjectOut]
 
 
 """Schema that is used to retrieve a project submission for a particular student"""
@@ -214,12 +225,39 @@ def get_project_details(request, project_slug: str, username: str):
         if not username:
             return
         user = User.objects.filter(username=username).first()
-        print(user)
         if not user:
             return
         project_submission = ProjectSubmission.objects.get(project__slug=project_slug,
                                                                  student__student=user)
         return {"classroom": project_submission.classroom, "project": project_submission.project}
+    else:
+        return
+
+
+"""Retrieves details for a specific project"""
+@api.get("/classrooms/{classroom_slug}", response=DetailedClassroomOut)
+def get_classroom_details(request, classroom_slug: str, username: str):
+    if classroom_slug and username:
+        if not username:
+            return "No username given"
+        user = User.objects.filter(username=username).first()
+        if not user:
+            return
+        projects_list = []
+        if user.type == "Instructor":
+            projects_list = list_instructor_projects(request, username=user.username)
+        elif user.type == "Student":
+            projects_list = list_student_projects(request, username=user.username)
+        classroom = Classroom.objects.get(slug=classroom_slug)
+        students = ClassStudents.objects.filter(classroom=classroom)
+        print(students)
+        students_json = []
+        for student in students:
+            students_json.append({'username': student.student.username, 'type': student.student.type})
+
+        print(students_json)
+
+        return {"classroom": classroom, "users": students_json, "projects_list": list(projects_list)}
     else:
         return
 
