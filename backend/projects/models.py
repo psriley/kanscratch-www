@@ -2,7 +2,7 @@ from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import AbstractUser
 
-from projects.managers import ClassManager, UManager
+from projects.managers import ProjectSubmissionManager, ClassroomManager, UManager
 
 """
 Describes the User object that is used to identify a user.
@@ -30,31 +30,42 @@ class Student(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
 
+class Color(models.Model):
+    name = models.CharField(max_length=500)
+    slug = models.CharField(max_length=255, unique=True)
+    hex_code = models.CharField(max_length=7)
+
+
 """
-Describes the Class object that is used to identify a class or classes that a user is part of.
+Describes the Classroom object that is used to identify a classroom or classrooms that a user is part of.
 """
-class Class(models.Model):
-    #TODO: Need to add a "color" that designates the color that associates projects and classrooms in this class
-    instructor = models.ForeignKey(Instructor, on_delete=models.CASCADE)
+class Classroom(models.Model):
+    slug = models.CharField(max_length=255, unique=True)
     name = models.CharField(max_length=200)
-    class_code_hash = models.CharField(max_length=250)
+    description = models.TextField(blank=True, null=True)
+    instructor = models.ForeignKey(Instructor, on_delete=models.CASCADE)
+    class_code_hash = models.CharField(max_length=7, unique=True)
+    color = models.ForeignKey(Color, on_delete=models.CASCADE, blank=True)
     active = models.BooleanField(default=True)
     created_on = models.DateTimeField(default=timezone.now)
     created_by = models.ForeignKey(User, related_name='class_created_user', on_delete=models.CASCADE)
     updated_on = models.DateTimeField(default=timezone.now)
     updated_by = models.ForeignKey(User, related_name='class_updated_user', on_delete=models.CASCADE)
 
-    objects = ClassManager()
+    objects = ClassroomManager()
+
+    class Meta:
+        unique_together = ('instructor', 'color')
 
 
 """
-Describes the Class and Student relationship/bridge table. This is used to identify a specific Student
-object in a class.
+Describes the Classroom and Student relationship/bridge table. This is used to identify a specific Student
+object in a classroom.
 """
 class ClassStudents(models.Model):
-    # class is a python specific name, so vars()['class'] enables the field to be called class (https://stackoverflow.com/questions/47630356/using-the-reserved-word-class-as-field-name-in-django-and-django-rest-framewor).
-    vars()['class'] = models.OneToOneField(Class, on_delete=models.CASCADE)
-    student = models.OneToOneField(User, on_delete=models.CASCADE)
+    classroom = models.ForeignKey(Classroom, on_delete=models.RESTRICT)
+    student = models.ForeignKey(User, on_delete=models.RESTRICT)
+    active = models.BooleanField(default=True)
 
 
 """
@@ -63,10 +74,10 @@ Describes a Project object. This is used by teachers to assign projects to stude
 # TODO: Change this model so that Project objects are associated to classes and projects can be
 # copied over from other classes.
 class Project(models.Model):
-    # class is a python specific name, so vars()['class'] enables the field to be called class (https://stackoverflow.com/questions/47630356/using-the-reserved-word-class-as-field-name-in-django-and-django-rest-framewor).
-    vars()['class'] = models.OneToOneField(Class, on_delete=models.SET_NULL, null=True)
-    name = models.CharField(max_length=50)
-    description = models.CharField(max_length=250)
+    classroom = models.OneToOneField(Classroom, on_delete=models.SET_NULL, null=True)
+    name = models.CharField(max_length=32)
+    slug = models.CharField(max_length=255, unique=True)
+    description = models.TextField()
     due_date = models.DateTimeField(blank=True, null=True)
     available_date = models.DateTimeField(blank=True, null=True)
     created_on = models.DateTimeField(default=timezone.now)
@@ -76,7 +87,7 @@ class Project(models.Model):
 
     # two of the same projects can be in multiple classes, but two of the same projects can't be in the same class
     class Meta:
-        unique_together = (('id', 'class'), ('name', 'class'))
+        unique_together = (('id', 'classroom'), ('name', 'classroom'))
 
 
 """
@@ -84,11 +95,12 @@ Describes the submission of a Project object. This is used by students, but teac
 """
 class ProjectSubmission(models.Model):
     project = models.ForeignKey(Project, on_delete=models.SET_NULL, null=True)
-    # class is a python specific name, so vars()['class'] enables the field to be called class (https://stackoverflow.com/questions/47630356/using-the-reserved-word-class-as-field-name-in-django-and-django-rest-framewor).
-    vars()['class'] = models.ForeignKey(Class, on_delete=models.SET_NULL, null=True)
+    classroom = models.ForeignKey(Classroom, on_delete=models.SET_NULL, null=True)
     student = models.ForeignKey(ClassStudents, on_delete=models.SET_NULL, null=True)
     created_on = models.DateTimeField(default=timezone.now)
     created_by = models.ForeignKey(User, related_name='submission_created_user', on_delete=models.CASCADE)
+    
+    objects = ProjectSubmissionManager()
 
     class Meta:
-        unique_together = ('project', 'student', 'class')
+        unique_together = ('project', 'student', 'classroom')

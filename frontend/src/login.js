@@ -34,11 +34,11 @@ function LogIn() {
             const response = await axios.post('http://localhost:8000/api/login', post);
             //setResponse(response.data);
             if (response.data !== undefined) {
-                if (response.data === "Successful!") {
-                    const credentials = post.username;
+                if (response.data.message === "Successful!") {
+                    const credentials = {username: response.data.user.username, type: response.data.user.type};
                     setIsSubmitted(true);
-                    localStorage.setItem("login_credentials", credentials);
-                } else if (response.data === "Wrong password!") {
+                    localStorage.setItem("login_credentials", JSON.stringify(credentials));
+                } else if (response.data.message === "Wrong password!") {
                     setErrorMessages({ name: "pass", message: errors.pass });
                 } else {
                     setErrorMessages( { name: "uname", message: errors.uname });

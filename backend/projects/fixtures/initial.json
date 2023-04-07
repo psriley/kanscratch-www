@@ -1,5 +1,32 @@
 [
   {
+    "model": "projects.color",
+    "pk": 1,
+    "fields": {
+      "name": "red",
+      "slug": "red",
+      "hex_code": "#FF0000"
+    }
+  },
+  {
+    "model": "projects.color",
+    "pk": 2,
+    "fields": {
+      "name": "blue",
+      "slug": "blue",
+      "hex_code": "#0000FF"
+    }
+  },
+  {
+    "model": "projects.color",
+    "pk": 3,
+    "fields": {
+      "name": "green",
+      "slug": "green",
+      "hex_code": "#00FF00"
+    }
+  },
+  {
     "model": "projects.user",
     "pk": 1,
     "fields": {
@@ -48,24 +75,44 @@
     }
   },
   {
-    "model": "projects.class",
+    "model": "projects.user",
+    "pk": 4,
+    "fields": {
+      "username": "student2",
+      "password_hash": "bcrypt_sha256$$2b$12$SKsLQUa2InkStO0VuxDHp.yim6P1siCfrxh6.Rq8fXUz/ooxJbp8a",
+      "type": "Student"
+    }
+  },
+  {
+    "model": "projects.student",
+    "pk": 2,
+    "fields": {
+      "user_id": 4
+    }
+  },
+  {
+    "model": "projects.classroom",
     "pk": 1,
     "fields": {
       "name": "Class1",
+      "slug": "classroom_1",
+      "color": 1,
       "created_by_id": 1,
       "instructor_id": 1,
-      "class_code_hash": "hash",
+      "class_code_hash": "hAFtZQp",
       "updated_by_id": 1
     }
   },
   {
-    "model": "projects.class",
+    "model": "projects.classroom",
     "pk": 2,
     "fields": {
       "name": "Class2",
+      "color": 2,
+      "slug": "classroom_2",
       "created_by_id": 3,
       "instructor_id": 2,
-      "class_code_hash": "hsah",
+      "class_code_hash": "gPa0Ati",
       "updated_by_id": 3
     }
   },
@@ -73,8 +120,16 @@
     "model": "projects.classstudents",
     "pk": 1,
     "fields": {
-      "class": 1,
+      "classroom": 1,
       "student": 2
+    }
+  },
+  {
+    "model": "projects.classstudents",
+    "pk": 2,
+    "fields": {
+      "classroom": 1,
+      "student": 4
     }
   },
   {
@@ -82,10 +137,21 @@
     "pk": 1,
     "fields": {
       "name": "Project1",
-      "description": "blah",
-      "class_id": 1,
+      "slug": "project1_alskf",
+      "description": "● Fall Pumpkin Decorator ● ~~~~~~~~~~~~~~~~~~~~\nThe season Fall starts on September 22nd 2022 this year. In honor of my favorite season, here is a decorator!\n● Controls ●\n~~~~~~~~~~\nClick the black icons to change the menu that appears on the far left so you can customize your pumpkin. Click on the background to change it's costume If you see an ad in the comments, report the comment please.\n● Credits ●\n~~~~~~~~\nArt - 100% by me Code - 100% by me The Song is called Moo Moo Meadows from Mario Cart 8, but I got it from @jean-pierre-scratch\n● Notes ●\n~~~~~~~~\n9/29/2022 - This feels so unreal TYSM to Scratch Team for featuring this! Sorry if I can't reply to all the messages but thank you guys for all the nice comments :)",
+      "classroom_id": 1,
       "created_by_id": 1,
       "updated_by_id": 1
+    }
+  },
+  {
+    "model": "projects.projectsubmission",
+    "pk": 1,
+    "fields": {
+      "classroom_id": 1,
+      "created_by_id": 1,
+      "project_id": 1,
+      "student_id": 1
     }
   }
 ]

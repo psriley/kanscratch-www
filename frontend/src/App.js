@@ -12,29 +12,60 @@ import axios from "axios";
 function App() {
   const [showModal, setShowModal] = useState(false);
   const [classes, setClasses] = useState([]);
+  const [allClasses, setAllClasses] = useState([]);
   const [projects, setProjects] = useState([]);
+  const [credentials, setCredentials] = useState(null);
 
   useEffect(() => {
-    const credentials = localStorage.getItem("login_credentials");
+    const storedCredentials = JSON.parse(localStorage.getItem("login_credentials"));
     if (credentials) {
-      axios.get('http://localhost:8000/api/classes', {params: {username: credentials}})
-        .then(res => {
-            const classes = res.data;
-            setClasses(classes);
-        })
-        .catch(error => {
-          console.log(error.response.data.error);
-        })
+      if (storedCredentials && storedCredentials.username !== credentials.username) {
+        setCredentials(storedCredentials);
+      }
+    } else {
+      setCredentials(storedCredentials);
     }
-  }, []);
+  }, [credentials]);
 
   useEffect(() => {
-    axios.get('http://localhost:8000/api/projects')
-      .then(res => {
-          const projects = res.data;
-          setProjects(projects);
-      })
-  }, []);
+    if (!credentials) {
+      return;
+    }
+
+    let source = axios.CancelToken.source();
+
+    const fetchClasses = async () => {
+      try {
+        let response = await axios.get('http://localhost:8000/api/user_classes', { params: {username: credentials.username}, cancelToken: source.token });
+        const classes = response.data;
+        setClasses(classes);
+      } catch (error) {
+        console.log(error.response.data.error);
+      }
+    };
+
+    const fetchProjects = async () => {
+      try {
+        let response;
+        if (credentials.type === 'Student') {
+          response = await axios.get(`http://localhost:8000/api/student_projects/${credentials.username}`, { cancelToken: source.token });
+        } else {
+          response = await axios.get(`http://localhost:8000/api/instructor_projects/${credentials.username}`, { cancelToken: source.token });
+        }
+        const projects = response.data;
+        setProjects(projects);
+      } catch (error) {
+        console.log(error.response.data.error);
+      }
+    };
+
+    fetchClasses();
+    fetchProjects();
+
+    return () => {
+      source.cancel();
+    };
+  }, [credentials]);
 
   const handleShowModal = () => {
     setShowModal(true);
@@ -42,6 +73,40 @@ function App() {
 
   const handleCloseModal = () => {
     setShowModal(false);
+  };
+
+  const handleJoinButtonClick = async () => {
+    const fetchedClasses = await getAllClasses();
+    joinClass(fetchedClasses);
+  };
+
+  async function getAllClasses() {
+    return axios.get('http://localhost:8000/api/classes')
+      .then(res => {
+        return res.data;
+      });
+  }
+
+  const joinClass = (fetchedClasses) => {
+    const code = document.getElementById("code").value;
+    const hashes = fetchedClasses.map((value) => {
+      return { name: value.name, code: value.class_code_hash };
+    });
+
+    hashes.forEach((value) => {
+      if (value.code === code) {
+        console.log("Match!");
+        axios.post('http://localhost:8000/api/join', {
+          "classroom_name": value.name, // remember to change this key from "classroom_name" to "class_name"
+          "student": credentials,
+        }).then((response) => {
+          console.log(`Successfully joined class: ${value.name}!`);
+          window.location.reload();
+        });
+      } else {
+        console.log(`Failed to join class: ${value.name}`);
+      }
+    });
   };
 
   return (
@@ -53,10 +118,10 @@ function App() {
         <Modal show={showModal} handleClose={handleCloseModal}>
           <div className='codeBox'>
             <div id='codeDiv'>
-              <input className='classCode' type='text'/>
+              <input id="code" className='classCode' type='text'/>
             </div>
             <div className='buttonDiv'>
-              <button className='codeButton'>Join</button>
+              <button className='codeButton' onClick={handleJoinButtonClick}>Join</button>
             </div>
           </div>
         </Modal>
@@ -65,7 +130,7 @@ function App() {
             <span>Classrooms</span>
             <button name='join' onClick={handleShowModal}>Join</button>
           </div>
-          <ItemBox text={'classroom'} list={classes} />
+          <ItemBox text={'classroom'} list={classes.map((classroom) => {return {name: classroom.name}})} color={classes.map((classroom) => {return classroom.color.hex_code})} slug={classes.map((classroom) => {return {slug: classroom.slug}})} />
         </div>
 
         <div>
@@ -73,7 +138,7 @@ function App() {
             <span>Projects</span>
           </div>
           <div className='ProjectList'>
-            <ItemBox text={'project'} list={projects} />
+            <ItemBox text={'project'} list={projects.map((project) => {return {name: project.name}})} slug={projects.map((project) => {return {slug: project.slug}})} />
           </div>
         </div>
       </div>
