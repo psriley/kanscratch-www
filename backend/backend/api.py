@@ -63,6 +63,13 @@ class ClassroomIn(Schema):
     updated_by_id: int = 1
 
 
+"""Schema that is used to add a new entry to the ClassStudents Table"""
+"""Student attribute is just a username"""
+class ClassStudentsIn(Schema):
+    classroom_code: str
+    student: str
+
+
 class ColorOut(Schema):
     hex_code: str
 
@@ -264,8 +271,8 @@ def get_classroom_details(request, classroom_slug: str, username: str):
 
 """Creates a ClassStudents object."""
 @api.post("/join")
-def join_class(request, payload: ClassStudentsOut):
-    classroom_id = Classroom.objects.filter(name=payload.classroom_name).first().id
+def join_class(request, payload: ClassStudentsIn):
+    classroom_id = Classroom.objects.filter(class_code_hash=payload.classroom_code).first().id
     user = User.objects.filter(username=payload.student).first()
     cs = ClassStudents.objects.create(classroom_id=classroom_id, student=user)
     return {"id": cs.id}

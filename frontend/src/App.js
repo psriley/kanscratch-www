@@ -75,37 +75,14 @@ function App() {
     setShowModal(false);
   };
 
-  const handleJoinButtonClick = async () => {
-    const fetchedClasses = await getAllClasses();
-    joinClass(fetchedClasses);
-  };
-
-  async function getAllClasses() {
-    return axios.get('http://localhost:8000/api/classes')
-      .then(res => {
-        return res.data;
-      });
-  }
-
-  const joinClass = (fetchedClasses) => {
+  const joinClass = () => {
     const code = document.getElementById("code").value;
-    const hashes = fetchedClasses.map((value) => {
-      return { name: value.name, code: value.class_code_hash };
-    });
 
-    hashes.forEach((value) => {
-      if (value.code === code) {
-        console.log("Match!");
-        axios.post('http://localhost:8000/api/join', {
-          "classroom_name": value.name, // remember to change this key from "classroom_name" to "class_name"
-          "student": credentials,
-        }).then((response) => {
-          console.log(`Successfully joined class: ${value.name}!`);
-          window.location.reload();
-        });
-      } else {
-        console.log(`Failed to join class: ${value.name}`);
-      }
+    axios.post('http://localhost:8000/api/join', {
+      "classroom_code": code,
+      "student": credentials.username,
+    }).then((response) => {
+      window.location.reload();
     });
   };
 
@@ -121,7 +98,7 @@ function App() {
               <input id="code" className='classCode' type='text'/>
             </div>
             <div className='buttonDiv'>
-              <button className='codeButton' onClick={handleJoinButtonClick}>Join</button>
+              <button className='codeButton' onClick={joinClass}>Join</button>
             </div>
           </div>
         </Modal>
@@ -146,4 +123,13 @@ function App() {
   );
 }
 
-export default App;
+async function getAllClasses() {
+  return axios.get('http://localhost:8000/api/classes')
+    .then(res => {
+      return res.data;
+    });
+}
+
+//module.exports = {App, getAllClasses}
+export default App
+
