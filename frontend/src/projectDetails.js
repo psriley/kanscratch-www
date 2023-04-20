@@ -5,11 +5,13 @@ import Tbar from "./components/topbar";
 import axios from "axios";
 import {Link, useLocation} from "react-router-dom";
 
-// const appTarget = document.getElementById("root");
+
+//const appTarget = document.getElementById("root");
 //
-// Gui.setAppElement(appTarget);
+//Gui.setAppElement(appTarget);
 //
-// const WrappedGui = AppStateHOC(Gui);
+//const WrappedGui = AppStateHOC(Gui);
+
 
 /**
  * Contains information describing the details of a specific project on a page called "Project Details".
@@ -60,6 +62,8 @@ function ProjectDetails() {
                 {/*<h1 className='title'>Project Details</h1>*/}
             </header>
             <div id='content'>
+              {
+                
                 <div className="login-form">
                     <div className="title-grey" style={{textAlign: "center"}}>Project Details</div>
                     <div className="Container">
@@ -73,8 +77,14 @@ function ProjectDetails() {
                         </div>
                         <div id="description">{details}</div>
                     </div>
+                  
                 </div>
-                {/*<WrappedGui/>*/}
+                
+              /*}
+                {<WrappedGui  canEditTitle
+                />}
+                */
+              }
             </div>
         </div>
   );
