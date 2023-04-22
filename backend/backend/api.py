@@ -1,3 +1,4 @@
+from django.db import IntegrityError
 from django.forms import model_to_dict
 from ninja import NinjaAPI
 from ninja import Schema
@@ -150,8 +151,11 @@ def list_users(request):
 """Creates a user object."""
 @api.post("/users")
 def create_user(request, payload: UserIn):
-    user = User.objects.create_user(**payload.dict())
-    return {"id": user.id}
+    try:
+        user = User.objects.create_user(**payload.dict())
+        return {"id": user.id, "username": user.username, "type": user.type}
+    except IntegrityError:
+        raise IntegrityError(f"{payload.username} already exists!")
 
 
 """Validates a user trying to login to make sure they are in the database."""
@@ -197,9 +201,9 @@ def list_projects(request):
 
 
 """Retrieves a list of all students in a class."""
-@api.get("/students/{class_id}", response=List[StudentOut])
-def list_students(request, class_id: int):
-    qs = Student.objects.filter(user__classstudents__class_id=class_id)
+@api.get("/students/{classroom_id}", response=List[StudentOut])
+def list_students(request, classroom_id: int):
+    qs = Student.objects.filter(user__classstudents__classroom_id=classroom_id)
     return qs
 
 
@@ -257,12 +261,9 @@ def get_classroom_details(request, classroom_slug: str, username: str):
             projects_list = list_student_projects(request, username=user.username)
         classroom = Classroom.objects.get(slug=classroom_slug)
         students = ClassStudents.objects.filter(classroom=classroom)
-        print(students)
         students_json = []
         for student in students:
             students_json.append({'username': student.student.username, 'type': student.student.type})
-
-        print(students_json)
 
         return {"classroom": classroom, "users": students_json, "projects_list": list(projects_list)}
     else:

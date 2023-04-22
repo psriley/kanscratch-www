@@ -25,6 +25,16 @@
 
 # Testing
 - Frontend testing is done with Jest (https://jestjs.io/). Tests can be run (after directing to the frontend container with `cd frontend` in your terminal) with `npm run test`.
+- Backend testing done with `django.tests` in the `tests` directory
+  + Model bakery is used to make easy to use recipes in `baker_recipes.py`. For more information: https://model-bakery.readthedocs.io/en/latest/
+  + Backend tests can be run with:
+    ```
+    docker-compose exec -it web python3 manage.py test backend.tests.{testing file name Ex: test_api}.{function name}.{name of the test}
+    ```
+  + For more help run: 
+    ```
+    docker-compose exec -it web python3 manage.py test --help
+    ```
 
 # Useful files
 - The navigation bar can be found in `frontend/src/components/topbar.js`.
